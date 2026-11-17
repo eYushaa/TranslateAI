@@ -31,7 +31,8 @@ Outlook에서 이메일을 작성하거나, Slack/Discord에서 대화할 때, V
 
 ## 🆕 v1.0.1 새로운 기능
 
-- **🧠 내장 TranslateAI Engine (`.gguf` 실행기):** 앱 실행 폴더 옆에 `models/` 폴더를 자동 생성하며, 미리 설치된 `.gguf` 모델을 별도 서버 없이 100% 오프라인으로 직접 실행합니다.
+- **🧠 내장 TranslateAI Engine (`.gguf` 실행 및 자동 컨텍스트 확장):** 앱 실행 폴더 옆에 `models/` 폴더를 자동 생성하고 `.gguf` 모델을 100% 오프라인 실행합니다. 긴 텍스트 번역 시 설정 가능한 상한(기본 **10K**)까지 **자동 컨텍스트 확장(`4K → 8K → 16K → 50K`)**과 **동적 컨텍스트 축소**를 지원합니다.
+- **💬 문맥 인식 번역 (Context-Aware Translation):** 최근 번역 기록(기본 최근 5개 메시지, RAM에만 30분 보관)을 AI 제공자에게 참고 문맥으로 전달하여 대화 내 대명사, 고유명사, 용어 및 어조의 일관성을 유지합니다.
 - **🔌 OpenAI Compatible 제공자:** 로컬 호환 제공자 이름을 **OpenAI Compatible**로 통일하고, 스크롤 화살표나 크기 흔들림이 없는 깔끔한 필(Pill) 탭 UI를 적용했습니다.
 - **🇮🇱 히브리어 UI 및 RTL 완벽 지원 (`עברית`):** 아랍어에 이어 오른쪽에서 왼쪽(RTL) 레이아웃이 적용된 히브리어 UI가 추가되었습니다 (총 11개 UI 언어).
 - **🎨 UI 및 사용성 개선:** 선명한 벡터 체크박스 아이콘, 괄호 설명이 제거된 깔끔한 언어 이름, 각 단축키 제목 아래 회색 안내 문구를 추가했습니다.
@@ -69,7 +70,7 @@ Outlook에서 이메일을 작성하거나, Slack/Discord에서 대화할 때, V
 ---
 
 ### 🤖 3. 로컬 및 클라우드 AI 모델 + 내장 GGUF 엔진 지원
-- **TranslateAI Engine (내장 `.gguf`):** `models/` 폴더에 있는 `.gguf` 모델을 외부 서버 없이 100% 오프라인으로 직접 실행.
+- **TranslateAI Engine (내장 `.gguf`):** `models/` 폴더에 있는 `.gguf` 모델을 외부 서버 없이 100% 오프라인으로 직접 실행하며, *제공자 → TranslateAI Engine*에서 설정 가능한 최대 한도(기본 **10K**) 내 **자동 컨텍스트 확장(`4K → 8K → 16K → 50K`)** 및 **동적 컨텍스트 축소**를 제공합니다.
 - **OpenAI Compatible (Ollama / LocalAI / vLLM):** OpenAI 호환 API(`http://localhost:11434/v1`)를 통해 100% 오프라인 비공개 추론.
 - **LM Studio:** 로컬 모델 환경과 간편 연결(`http://localhost:1234/v1`).
 - **Google Gemini:** Gemini 3.8 Flash, Gemini 3.5 Flash-Lite 및 Gemini 4(Argon / Hydrogen / Carbon)를 통한 초고속 클라우드 번역.

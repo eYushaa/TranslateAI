@@ -31,7 +31,8 @@ Ganz gleich, ob Sie E-Mails in Outlook verfassen, in Slack/Discord chatten, in V
 
 ## 🆕 Neu in v1.0.1
 
-- **🧠 Integrierte TranslateAI Engine (`.gguf`-Laufzeit):** Erstellt automatisch einen `models/`-Ordner im Anwendungs­verzeichnis und führt vorinstallierte `.gguf`-Modelle 100 % offline aus.
+- **🧠 Integrierte TranslateAI Engine (`.gguf`-Laufzeit & automatische Kontexterweiterung):** Erstellt automatisch einen `models/`-Ordner im Anwendungs­verzeichnis und führt `.gguf`-Modelle 100 % offline aus. Mit **automatischer Kontexterweiterung (`4K → 8K → 16K → 50K`)** bis zu einem konfigurierbaren Limit (Standard **10K**) sowie **dynamischer Kontextkürzung** für lange Texte.
+- **💬 Kontextbewusste Übersetzung (Context-Aware):** Merkt sich die letzten Übersetzungen (Standard: letzte 5 Nachrichten für 30 Minuten ausschließlich im RAM), um Pronomen, Namen, Fachbegriffe und Tonfall konsistent zu halten.
 - **🔌 Anbieter OpenAI Compatible:** Einheitliche Benennung als **OpenAI Compatible** sowie moderne Tab-Buttons ohne Scrollpfeile oder Breitensprünge.
 - **🇮🇱 Hebräische UI & volle RTL-Unterstützung (`עברית`):** Vollständige hebräische Oberfläche mit nativem Rechts-nach-Links-Layout (insgesamt 11 UI-Sprachen).
 - **🎨 UI- und Detailverbesserungen:** Scharfe Vektor-Häkchen für Checkboxen, saubere Sprachnamen ohne Klammerzusätze und graue Hinweistexte unter den Tastenkombinationen.
@@ -70,7 +71,7 @@ Keine technischen Kenntnisse oder Python-Installationen erforderlich:
 ---
 
 ### 🤖 3. Multi-Provider-KI & Integrierte GGUF-Engine
-- **TranslateAI Engine (Integriertes `.gguf`):** Führt `.gguf`-Modelle aus dem Ordner `models/` 100 % offline direkt in der App aus.
+- **TranslateAI Engine (Integriertes `.gguf`):** Führt `.gguf`-Modelle aus dem Ordner `models/` 100 % offline direkt in der App aus – inklusive **automatischer Kontexterweiterung (`4K → 8K → 16K → 50K`)**, konfigurierbarem Max-Limit (Standard **10K** unter *Anbieter → TranslateAI Engine*) und **dynamischer Kontextkürzung**.
 - **OpenAI Compatible (Ollama / LocalAI / vLLM):** 100 % privat und offline über OpenAI-kompatible Schnittstellen (`http://localhost:11434/v1`).
 - **LM Studio:** Direkte Integration lokaler Modelle (`http://localhost:1234/v1`).
 - **Google Gemini:** Höchste Geschwindigkeit und Präzision mit Gemini 3.8 Flash, Gemini 3.5 Flash-Lite oder Gemini 4 (Argon / Hydrogen / Carbon).

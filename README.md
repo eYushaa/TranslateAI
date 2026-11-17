@@ -31,7 +31,8 @@ Whether composing emails in Outlook, chatting in Slack/Discord, coding in VS Cod
 
 ## 🆕 What's New in v1.0.1
 
-- **🧠 Built-in TranslateAI Engine (`.gguf` Runner):** Automatically creates a `models/` directory next to the application and executes pre-installed `.gguf` models 100% offline with its integrated inference engine.
+- **🧠 Built-in TranslateAI Engine (`.gguf` Runner & Auto-Expanding Context):** Automatically creates a `models/` directory next to the application and runs pre-installed `.gguf` models 100% offline. Features **auto-expanding context (`4K → 8K → 16K → 50K`)** up to a configurable limit (default **10K**) and **dynamic context trimming** for long documents.
+- **💬 Context-Aware Translation:** Remembers your recent translations (in RAM only, default last 5 messages for 30 minutes) and passes them as reference to AI providers so pronouns, names, terminology, and tone stay consistent across conversations.
 - **🔌 OpenAI Compatible Provider:** Renamed and streamlined local/custom endpoint provider (`OpenAI Compatible`) alongside LM Studio, Google Gemini, and Google Translate.
 - **🇮🇱 Hebrew UI & Full RTL Support (`עברית`):** Added complete Hebrew interface localization with native Right-to-Left (RTL) layout alongside Arabic (11 UI languages total).
 - **🎨 UI & Usability Overhaul:** Crisp vector checkmarks on checkboxes, clean pill tabs without overflow scroll arrows, cleaner native language names (without parenthetical translations), and descriptive helper notes under shortcut labels.
@@ -72,7 +73,7 @@ You don't need Python, terminals, or complex configurations:
 
 ### 🤖 3. Multi-Provider AI & Offline GGUF Engine
 Choose and switch between built-in offline inference, local servers, and cloud providers:
-- **TranslateAI Engine (Built-in `.gguf`):** Runs `.gguf` models placed inside the `models/` folder 100% locally with zero external dependencies or servers.
+- **TranslateAI Engine (Built-in `.gguf`):** Runs `.gguf` models placed inside the `models/` folder 100% locally with zero external dependencies or servers. Includes **auto-expanding context (`4K → 8K → 16K → 50K`)** up to a configurable max limit (default **10K** in *Providers → TranslateAI Engine*) and **dynamic context trimming** when translating long texts.
 - **OpenAI Compatible (Ollama / LocalAI / vLLM):** Offline or self-hosted inference via any OpenAI-compatible API endpoint (`http://localhost:11434/v1`).
 - **LM Studio:** Direct local model integration (`http://localhost:1234/v1`).
 - **Google Gemini:** High-speed cloud translations using Gemini 3.8 Flash, Gemini 3.5 Flash-Lite, or Gemini 4 (Argon / Hydrogen / Carbon) with your own API key.
@@ -89,6 +90,7 @@ Choose between tailored preset modes or create your own:
 - **Academic & Technical:** High rigor and terminology preservation for scientific papers.
 - **Concise Summary:** Condenses foreign text into essential key points.
 - **Custom System Prompt:** Fully customize prompts using `{target}` and `{source}` placeholders.
+- **Context-Aware Memory:** Optionally send recent translations (2–10 messages, 30-minute RAM-only TTL) to AI providers (*TranslateAI Engine, Gemini, LM Studio, OpenAI Compatible*) for consistent pronouns, terms, and tone, with one-click memory reset.
 
 ---
 

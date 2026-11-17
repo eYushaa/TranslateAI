@@ -31,7 +31,8 @@ Ya sea redactando correos en Outlook, chateando en Discord/Slack, programando en
 
 ## 🆕 Novedades de la versión v1.0.1
 
-- **🧠 Motor integrado TranslateAI Engine (`.gguf`):** Crea automáticamente una carpeta `models/` junto a la aplicación y ejecuta modelos `.gguf` preinstalados 100 % sin conexión.
+- **🧠 Motor integrado TranslateAI Engine (`.gguf` y contexto autoampliable):** Crea automáticamente una carpeta `models/` junto a la aplicación y ejecuta modelos `.gguf` 100 % sin conexión. Incluye **expansión automática de contexto (`4K → 8K → 16K → 50K`)** hasta un límite configurable (por defecto **10K**) y **recorte dinámico de contexto** para textos largos.
+- **💬 Traducción sensible al contexto (Context-Aware):** Recuerda tus traducciones recientes (por defecto los últimos 5 mensajes durante 30 minutos solo en RAM) para mantener la coherencia de pronombres, nombres, terminología y tono.
 - **🔌 Proveedor OpenAI Compatible:** Proveedor local unificado bajo el nombre **OpenAI Compatible** y pestañas modernas sin flechas de desplazamiento ni saltos de tamaño.
 - **🇮🇱 Interfaz en hebreo y soporte RTL (`עברית`):** Traducción completa de la interfaz al hebreo con diseño nativo de derecha a izquierda (RTL), sumando 11 idiomas de interfaz.
 - **🎨 Mejoras visuales y de usabilidad:** Marcas de verificación vectoriales nítidas, nombres nativos limpios en los selectores de idioma y notas descriptivas debajo de cada atajo de teclado.
@@ -70,7 +71,7 @@ No necesitas Python, consola ni configuraciones complicadas:
 ---
 
 ### 🤖 3. Múltiples Proveedores de IA y Motor GGUF Integrado
-- **TranslateAI Engine (`.gguf` integrado):** Ejecuta modelos `.gguf` desde la carpeta `models/` 100 % sin conexión y sin servidores externos.
+- **TranslateAI Engine (`.gguf` integrado):** Ejecuta modelos `.gguf` desde la carpeta `models/` 100 % sin conexión y sin servidores externos, con **contexto autoampliable (`4K → 8K → 16K → 50K`)**, límite máximo configurable (por defecto **10K** en *Proveedores → TranslateAI Engine*) y **recorte dinámico de contexto**.
 - **OpenAI Compatible (Ollama / LocalAI / vLLM):** 100 % privado y sin conexión mediante API compatible con OpenAI (`http://localhost:11434/v1`).
 - **LM Studio:** Integración directa con modelos locales (`http://localhost:1234/v1`).
 - **Google Gemini:** Traducciones en la nube con Gemini 3.8 Flash, Gemini 3.5 Flash-Lite o Gemini 4 (Argon / Hydrogen / Carbon).

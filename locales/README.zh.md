@@ -31,7 +31,8 @@
 
 ## 🆕 v1.0.1 更新内容
 
-- **🧠 内置 TranslateAI Engine（`.gguf` 推理引擎）：** 在应用目录自动创建 `models/` 文件夹，无需外部服务即可 100% 离线直接运行预装的 `.gguf` 模型。
+- **🧠 内置 TranslateAI Engine（`.gguf` 推理与自动扩展上下文）：** 在应用目录自动创建 `models/` 文件夹并 100% 离线运行 `.gguf` 模型。支持**自动扩展上下文（`4K → 8K → 16K → 50K`）**至可配置上限（默认 **10K**），并在长文本超出上限时自动进行**动态上下文缩减**。
+- **💬 上下文感知翻译（Context-Aware Translation）：** 仅在内存中保留近期翻译（默认最近 5 条消息，有效期 30 分钟），作为参考发送给 AI 提供方，从而在对话中保持代词、专有名词、术语与语气的一致性。
 - **🔌 OpenAI Compatible 提供方：** 将本地/兼容接口提供方统一命名为 **OpenAI Compatible**，并采用无滚动箭头、等宽稳定的胶囊选项卡。
 - **🇮🇱 新增希伯来语界面与完整 RTL 支持（`עברית`）：** 新增完整的希伯来语界面及原生从右到左（RTL）排版，共支持 11 种界面语言。
 - **🎨 界面细节全面打磨：** 复选框采用清晰矢量勾选图标、语言选择器移除冗余括号后缀，并在快捷键标题下方展示灰色说明注释。
@@ -70,7 +71,7 @@
 ---
 
 ### 🤖 3. 多模型提供方与内置 GGUF 离线引擎
-- **TranslateAI Engine（内置 `.gguf`）：** 直接调用 `models/` 文件夹内的 `.gguf` 模型实现 100% 离线翻译。
+- **TranslateAI Engine（内置 `.gguf`）：** 直接调用 `models/` 文件夹内的 `.gguf` 模型实现 100% 离线翻译，支持**自动扩展上下文（`4K → 8K → 16K → 50K`）**、在*提供方 → TranslateAI Engine*中自定义最大上下文上限（默认 **10K**）以及**动态上下文缩减**。
 - **OpenAI Compatible（Ollama / LocalAI / vLLM）：** 通过 OpenAI 兼容 API (`http://localhost:11434/v1`) 实现 100% 离线、纯私密推理。
 - **LM Studio：** 一键直连本地部署的模型服务 (`http://localhost:1234/v1`)。
 - **Google Gemini：** 支持 Gemini 3.8 Flash、Gemini 3.5 Flash-Lite 与 Gemini 4（Argon / Hydrogen / Carbon）高速云端翻译（使用个人 API 密钥）。

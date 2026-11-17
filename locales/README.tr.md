@@ -31,7 +31,8 @@ Outlook'ta e-posta yazarken, Slack veya Discord'da mesajlaşırken, VS Code'da k
 
 ## 🆕 v1.0.1 Yenilikleri
 
-- **🧠 Dahili TranslateAI Engine (`.gguf` Motoru):** Uygulama dizininde otomatik `models/` klasörü oluşturur ve önceden kurulmuş `.gguf` modellerini harici sunucu gerekmeden %100 çevrimdışı çalıştırır.
+- **🧠 Dahili TranslateAI Engine (`.gguf` Motoru & Otomatik Artan Bağlam):** Uygulama dizininde otomatik `models/` klasörü oluşturur ve `.gguf` modellerini harici sunucu gerekmeden %100 çevrimdışı çalıştırır. Uzun metinlerde **otomatik artan bağlam (`4K → 8K → 16K → 50K`)**, *Sağlayıcılar → TranslateAI Engine* üzerinden ayarlanabilen üst sınır (varsayılan **10K**) ve **dinamik bağlam kısaltma** sunar.
+- **💬 Bağlam Anlama (Context-Aware Translation):** Son çevirilerinizi (varsayılan son 5 mesaj, 30 dakika boyunca yalnızca RAM'de) yapay zeka sağlayıcılarına referans olarak gönderir; böylece sohbet boyunca zamirler, özel isimler, terimler ve üslup tutarlı kalır.
 - **🔌 OpenAI Compatible Sağlayıcı:** Yerel/özel uç nokta sağlayıcısı **OpenAI Compatible** adıyla sadeleştirildi; sağlayıcı sekmeleri kaydırma okları ve boyut oynaması olmadan modern hap (pill) tasarımına geçirildi.
 - **🇮🇱 İbranice Arayüz ve Tam RTL Desteği (`עברית`):** Arapçanın yanı sıra sağdan sola (RTL) düzen desteğiyle tam İbranice arayüz eklendi (toplam 11 arayüz dili).
 - **🎨 Arayüz İyileştirmeleri:** Onay kutularında net vektörel tik işaretleri, dil seçicide gereksiz Türkçe parantezlerin kaldırılması ve Kısayollar sayfasında her başlığın altında bilgilendirici gri açıklamalar eklendi.
@@ -72,7 +73,7 @@ Python, terminal veya karmaşık teknik ayarlarla uğraşmanıza gerek yoktur:
 
 ### 🤖 3. Çoklu Sağlayıcı Mimarisi ve Dahili GGUF Motoru
 İster dahili çevrimdışı modellerle ister yerel sunucu veya bulut modellerinizle çalışın:
-- **TranslateAI Engine (Dahili `.gguf`):** `models/` klasöründeki `.gguf` modellerini doğrudan uygulama içinde %100 çevrimdışı çalıştırır.
+- **TranslateAI Engine (Dahili `.gguf`):** `models/` klasöründeki `.gguf` modellerini doğrudan uygulama içinde %100 çevrimdışı çalıştırır. *Sağlayıcılar → TranslateAI Engine* sekmesinden yapılandırılabilen maksimum bağlam sınırı (varsayılan **10K**), **otomatik bağlam genişletme (`4K → 8K → 16K → 50K`)** ve **dinamik bağlam kısaltma** içerir.
 - **OpenAI Compatible (Ollama / LocalAI / vLLM):** OpenAI uyumlu sunucular (`http://localhost:11434/v1`) üzerinden yerel ve gizli çeviri.
 - **LM Studio:** Model listeleme ve bağlantı testi desteğiyle doğrudan entegrasyon (`http://localhost:1234/v1`).
 - **Google Gemini:** Kendi API anahtarınızla Gemini 3.8 Flash, Gemini 3.5 Flash-Lite ve Gemini 4 (Argon / Hydrogen / Carbon) modelleriyle ultra hızlı çeviri.
@@ -89,6 +90,7 @@ Python, terminal veya karmaşık teknik ayarlarla uğraşmanıza gerek yoktur:
 - **Akademik ve Teknik:** Bilimsel makaleler, terimler ve kodlar için yüksek hassasiyet.
 - **Kısa ve Öz Özetleme:** Uzun yabancı metinleri ana hatlarıyla özetler.
 - **Özel Sistem Promptu:** `{target}` ve `{source}` parametreleriyle kendi kurallarınızı belirleyin.
+- **Bağlam Anlama Belleği:** Önceki çevirileri (2–10 mesaj, 30 dakika yalnızca RAM'de) yapay zeka sağlayıcılarına (*TranslateAI Engine, Gemini, LM Studio, OpenAI Compatible*) bağlam olarak göndererek zamir ve terim uyumunu korur; tek tıkla sıfırlanabilir.
 
 ---
 
