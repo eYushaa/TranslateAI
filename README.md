@@ -1,19 +1,19 @@
 <div align="center">
 
-# 🌐 AITranslator
+# 🌐 TranslateAI
 
 ### **No Barrier, No Border**
 
 *A modern, system-wide AI translation, OCR, and writing assistant for Windows 10 & 11.*
 
 [![Platform](https://img.shields.io/badge/Platform-Windows%2010%20%2F%2011-0078D6?logo=windows&logoColor=white)](https://microsoft.com/windows)
-[![Release](https://img.shields.io/badge/Release-v1.0.0-success?logo=github)](https://github.com/eYushaa/AI-Translator/releases)
+[![Release](https://img.shields.io/badge/Release-v1.0.1-success?logo=github)](https://github.com/eYushaa/AI-Translator/releases)
 [![PySide6](https://img.shields.io/badge/GUI-PySide6%20%2F%20Qt-41CD52?logo=qt&logoColor=white)](https://www.qt.io/)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 ---
 
-**[English](README.md) • [Türkçe](locales/README.tr.md) • [Español](locales/README.es.md) • [Français](locales/README.fr.md) • [Deutsch](locales/README.de.md) • [Русский](locales/README.ru.md) • [العربية](locales/README.ar.md) • [简体中文](locales/README.zh.md) • [日本語](locales/README.ja.md) • [한국어](locales/README.ko.md)**
+**[English](README.md) • [Türkçe](locales/README.tr.md) • [Español](locales/README.es.md) • [Français](locales/README.fr.md) • [Deutsch](locales/README.de.md) • [Русский](locales/README.ru.md) • [العربية](locales/README.ar.md) • [עברית](locales/README.he.md) • [简体中文](locales/README.zh.md) • [日本語](locales/README.ja.md) • [한국어](locales/README.ko.md)**
 
 ---
 
@@ -21,11 +21,21 @@
 
 ## 🌟 Overview
 
-**AITranslator** is an intelligent, blazing-fast Windows desktop utility that brings high-quality AI translation, screen OCR capture, and writing enhancement across your entire operating system.
+**TranslateAI** is an intelligent, blazing-fast Windows desktop utility that brings high-quality AI translation, screen OCR capture, offline `.gguf` local models, and writing enhancement across your entire operating system.
 
-Whether composing emails in Outlook, chatting in Slack/Discord, coding in VS Code, reading PDFs, or browsing the web, AITranslator seamlessly integrates with your workflow through simple global shortcuts.
+Whether composing emails in Outlook, chatting in Slack/Discord, coding in VS Code, reading PDFs, or browsing the web, TranslateAI seamlessly integrates with your workflow through simple global shortcuts.
 
 > **"No Barrier, No Border"** — Communicate effortlessly in any language, anywhere on your desktop, with zero friction and total privacy.
+
+---
+
+## 🆕 What's New in v1.0.1
+
+- **🧠 Built-in TranslateAI Engine (`.gguf` Runner):** Automatically creates a `models/` directory next to the application and executes pre-installed `.gguf` models 100% offline with its integrated inference engine.
+- **🔌 OpenAI Compatible Provider:** Renamed and streamlined local/custom endpoint provider (`OpenAI Compatible`) alongside LM Studio, Google Gemini, and Google Translate.
+- **🇮🇱 Hebrew UI & Full RTL Support (`עברית`):** Added complete Hebrew interface localization with native Right-to-Left (RTL) layout alongside Arabic (11 UI languages total).
+- **🎨 UI & Usability Overhaul:** Crisp vector checkmarks on checkboxes, clean pill tabs without overflow scroll arrows, cleaner native language names (without parenthetical translations), and descriptive helper notes under shortcut labels.
+- **🏷️ Official Rebrand to TranslateAI:** Unified branding, executable naming, and app settings under **TranslateAI**.
 
 ---
 
@@ -34,9 +44,9 @@ Whether composing emails in Outlook, chatting in Slack/Discord, coding in VS Cod
 You don't need Python, terminals, or complex configurations:
 
 1. Go to the **[Releases](https://github.com/eYushaa/AI-Translator/releases)** section on GitHub.
-2. Download **`AITranslator-Setup.exe`**
-3. Run the setup and open the app.
-4. The application starts quietly in your **Windows System Tray** (near the clock). You are ready to translate instantly!
+2. Download **`TranslateAI-Setup.exe`** and run the installer.
+3. Select the AI model you want during setup and complete the download.
+4. That's it — **TranslateAI** is ready to use in your **Windows System Tray** (near the clock)!
 
 ---
 
@@ -60,11 +70,12 @@ You don't need Python, terminals, or complex configurations:
 
 ---
 
-### 🤖 3. Multi-Provider AI & Local LLM Support
-Choose and switch between your favorite local and cloud providers:
-- **Local LLMs (Ollama / LocalAI / vLLM):** 100% private, offline inference via OpenAI-compatible API (`http://localhost:11434/v1`).
+### 🤖 3. Multi-Provider AI & Offline GGUF Engine
+Choose and switch between built-in offline inference, local servers, and cloud providers:
+- **TranslateAI Engine (Built-in `.gguf`):** Runs `.gguf` models placed inside the `models/` folder 100% locally with zero external dependencies or servers.
+- **OpenAI Compatible (Ollama / LocalAI / vLLM):** Offline or self-hosted inference via any OpenAI-compatible API endpoint (`http://localhost:11434/v1`).
 - **LM Studio:** Direct local model integration (`http://localhost:1234/v1`).
-- **Google Gemini:** High-speed cloud translations using Gemini 2.5 Flash, Pro, or Lite with your own API key.
+- **Google Gemini:** High-speed cloud translations using Gemini 3.8 Flash, Gemini 3.5 Flash-Lite, or Gemini 4 (Argon / Hydrogen / Carbon) with your own API key.
 - **Google Translate:** Zero-config translation with no API key required, plus optional official Google Cloud Translation API support.
 - **Automatic Fallback Chain:** If your active provider goes offline or exceeds quota, requests seamlessly fall back to your secondary providers.
 
@@ -81,9 +92,9 @@ Choose between tailored preset modes or create your own:
 
 ---
 
-### 🌍 5. 10 UI Languages & Native RTL Layout
+### 🌍 5. 11 UI Languages & Native RTL Layout
 Change the app's interface language anytime from the persistent bottom-left bar:
-- 🇹🇷 Türkçe • 🇬🇧 English • 🇫🇷 Français • 🇩🇪 Deutsch • 🇪🇸 Español • 🇷🇺 Русский • 🇸🇦 العربية *(Full RTL)* • 🇨🇳 简体中文 • 🇯🇵 日本語 • 🇰🇷 한국어
+- 🇹🇷 Türkçe • 🇬🇧 English • 🇫🇷 Français • 🇩🇪 Deutsch • 🇪🇸 Español • 🇷🇺 Русский • 🇸🇦 العربية *(Full RTL)* • 🇮🇱 עברית *(Full RTL)* • 🇨🇳 简体中文 • 🇯🇵 日本語 • 🇰🇷 한국어
 
 ---
 
@@ -100,7 +111,7 @@ Change the app's interface language anytime from the persistent bottom-left bar:
 |:---:|:---:|
 | ![Languages](docs/screenshots/1_languages.png) | ![OCR Settings](docs/screenshots/2_ocr.png) |
 
-| AI Providers & Endpoints | System-Wide Shortcuts |
+| AI Providers & TranslateAI Engine | System-Wide Shortcuts |
 |:---:|:---:|
 | ![Providers](docs/screenshots/3_providers.png) | ![Shortcuts](docs/screenshots/4_shortcuts.png) |
 

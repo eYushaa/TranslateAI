@@ -1,19 +1,19 @@
 <div align="center" dir="rtl">
 
-# 🌐 AITranslator
+# 🌐 TranslateAI
 
 ### **No Barrier, No Border**
 
 *مساعد الترجمة الفورية والتعرف الضوئي على النصوص (OCR) وتحسين الكتابة بالذكاء الاصطناعي لنظامي Windows 10 و 11.*
 
 [![Platform](https://img.shields.io/badge/Platform-Windows%2010%20%2F%2011-0078D6?logo=windows&logoColor=white)](https://microsoft.com/windows)
-[![Release](https://img.shields.io/badge/Release-v1.0.0-success?logo=github)](https://github.com/eYushaa/AI-Translator/releases)
+[![Release](https://img.shields.io/badge/Release-v1.0.1-success?logo=github)](https://github.com/eYushaa/AI-Translator/releases)
 [![PySide6](https://img.shields.io/badge/GUI-PySide6%20%2F%20Qt-41CD52?logo=qt&logoColor=white)](https://www.qt.io/)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](../LICENSE)
 
 ---
 
-**[English](../README.md) • [Türkçe](README.tr.md) • [Español](README.es.md) • [Français](README.fr.md) • [Deutsch](README.de.md) • [Русский](README.ru.md) • [العربية](README.ar.md) • [简体中文](README.zh.md) • [日本語](README.ja.md) • [한국어](README.ko.md)**
+**[English](../README.md) • [Türkçe](README.tr.md) • [Español](README.es.md) • [Français](README.fr.md) • [Deutsch](README.de.md) • [Русский](README.ru.md) • [العربية](README.ar.md) • [עברית](README.he.md) • [简体中文](README.zh.md) • [日本語](README.ja.md) • [한국어](README.ko.md)**
 
 ---
 
@@ -23,11 +23,21 @@
 
 ## 🌟 نظرة عامة
 
-**AITranslator** هو برنامج مكتبي خفيف وسريع لنظام ويندوز يوفر ترجمة احترافية عبر الذكاء الاصطناعي، واستخراج النصوص من أي جزء من الشاشة (OCR)، وتدقيق النصوص وتنسيقها مباشرة عبر اختصارات لوحة المفاتيح.
+**TranslateAI** هو برنامج مكتبي خفيف وسريع لنظام ويندوز يوفر ترجمة احترافية عبر الذكاء الاصطناعي، ونماذج `.gguf` المحلية دون اتصال، واستخراج النصوص من أي جزء من الشاشة (OCR)، وتدقيق النصوص وتنسيقها مباشرة عبر اختصارات لوحة المفاتيح.
 
 سواء كنت تكتب بريداً في Outlook، أو تدردش في Slack/Discord، أو تبرمج في VS Code، أو تتصفح الإنترنت، يعمل البرنامج بسلاسة في أي مكان على شاشتك.
 
 > **"No Barrier, No Border"** — تواصل بحرية تامة دون حواجز لغوية أو حدود، مع أقصى درجات الخصوصية والأمان.
+
+---
+
+## 🆕 الجديد في الإصدار v1.0.1
+
+- **🧠 محرك TranslateAI Engine المدمج (لتشغيل `.gguf`):** ينشئ تلقائياً مجلد `models/` بجوار التطبيق ويشغّل نماذج `.gguf` المثبتة مسبقاً بالكامل دون اتصال بالإنترنت.
+- **🔌 مزوّد OpenAI Compatible:** إعادة تسمية المزود المحلي إلى **OpenAI Compatible** مع تبويبات حديثة متناسقة دون أسهم تمرير.
+- **🇮🇱 واجهة عبرية ودعم RTL كامل (`עברית`):** إضافة اللغة العبرية إلى لغات الواجهة مع دعم التخطيط من اليمين إلى اليسار (ليصبح الإجمالي 11 لغة واجهة).
+- **🎨 تحسينات واجهة المستخدم:** علامات اختيار متجهة واضحة، وأسماء لغات أصلية نقية بدون أقواس زائدة، وملاحظات توضيحية رمادية أسفل كل اختصار.
+- **🏷️ الاسم الرسمي الجديد TranslateAI:** توحيد الهوية والملف التنفيذي ليصبح `TranslateAI.exe`.
 
 ---
 
@@ -36,9 +46,9 @@
 لا تحتاج إلى تثبيت بايثون أو استخدام سطر الأوامر:
 
 1. توجه إلى صفحة **[الإصدارات (Releases)](https://github.com/eYushaa/AI-Translator/releases)** على GitHub.
-2. حمّل ملف التثبيت **`AITranslator-Setup.exe`** أو النسخة المحمولة **`AITranslator.exe`**.
-3. قم بتشغيل الملف وفتح البرنامج.
-4. سيبدأ البرنامج بالعمل بهدوء في **شريط المهام** (بجوار الساعة) ويكون جاهزاً للاستخدام فوراً عبر الاختصارات!
+2. حمّل **`TranslateAI-Setup.exe`** وقم بتشغيل برنامج التثبيت.
+3. اختر نموذج الذكاء الاصطناعي الذي تريده أثناء التثبيت وأكمل التنزيل.
+4. وها هو **TranslateAI** جاهز أمامك في **شريط مهام Windows**!
 
 ---
 
@@ -60,10 +70,11 @@
 
 ---
 
-### 🤖 3. دعم واسع لنماذج الذكاء الاصطناعي المحلية والسحابية
-- **النماذج المحلية (Ollama / LocalAI / vLLM):** خصوصية كاملة وعمل دون اتصال عبر واجهات متوافقة مع OpenAI.
+### 🤖 3. دعم واسع لنماذج الذكاء الاصطناعي ومحرك GGUF المدمج
+- **TranslateAI Engine (تشغيل `.gguf` المدمج):** تشغيل نماذج `.gguf` من مجلد `models/` مباشرة دون الحاجة لأي خادم خارجي.
+- **OpenAI Compatible (Ollama / LocalAI / vLLM):** خصوصية كاملة وعمل دون اتصال عبر واجهات متوافقة مع OpenAI (`http://localhost:11434/v1`).
 - **LM Studio:** اتصال مباشر بالنماذج المحلية.
-- **Google Gemini:** سرعة فائقة ودقة عالية عبر Gemini 2.5 Flash و Pro.
+- **Google Gemini:** سرعة فائقة ودقة عالية عبر Gemini 3.8 Flash و Gemini 3.5 Flash-Lite و Gemini 4 (Argon / Hydrogen / Carbon).
 - **Google Translate:** جاهز للاستخدام الفوري دون الحاجة لمفاتيح API.
 
 ---

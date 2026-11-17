@@ -25,8 +25,13 @@
   "providers": {
     "active": "google",
     "auto_fallback": false,
-    "fallback_order": ["lmstudio", "local_llm", "gemini", "google"],
+    "fallback_order": ["translateai", "lmstudio", "local_llm", "gemini", "google"],
     "timeout_seconds": 30,
+    "translateai": {
+      "model": "",
+      "n_ctx": 2048,
+      "n_gpu_layers": -1
+    },
     "local_llm": {
       "base_url": "http://localhost:11434/v1",
       "model": ""
@@ -37,7 +42,7 @@
     },
     "gemini": {
       "base_url": "https://generativelanguage.googleapis.com/v1beta",
-      "model": "gemini-2.5-flash"
+      "model": "gemini-3.8-flash"
     },
     "google": {
       "use_cloud_api": false

@@ -1,19 +1,19 @@
 <div align="center">
 
-# 🌐 AITranslator
+# 🌐 TranslateAI
 
 ### **No Barrier, No Border**
 
 *Assistant moderne de traduction par IA, d'OCR et d'écriture pour Windows 10 & 11.*
 
 [![Plateforme](https://img.shields.io/badge/Plateforme-Windows%2010%20%2F%2011-0078D6?logo=windows&logoColor=white)](https://microsoft.com/windows)
-[![Version](https://img.shields.io/badge/Version-v1.0.0-success?logo=github)](https://github.com/eYushaa/AI-Translator/releases)
+[![Version](https://img.shields.io/badge/Version-v1.0.1-success?logo=github)](https://github.com/eYushaa/AI-Translator/releases)
 [![PySide6](https://img.shields.io/badge/GUI-PySide6%20%2F%20Qt-41CD52?logo=qt&logoColor=white)](https://www.qt.io/)
 [![Licence](https://img.shields.io/badge/Licence-MIT-blue.svg)](../LICENSE)
 
 ---
 
-**[English](../README.md) • [Türkçe](README.tr.md) • [Español](README.es.md) • [Français](README.fr.md) • [Deutsch](README.de.md) • [Русский](README.ru.md) • [العربية](README.ar.md) • [简体中文](README.zh.md) • [日本語](README.ja.md) • [한국어](README.ko.md)**
+**[English](../README.md) • [Türkçe](README.tr.md) • [Español](README.es.md) • [Français](README.fr.md) • [Deutsch](README.de.md) • [Русский](README.ru.md) • [العربية](README.ar.md) • [עברית](README.he.md) • [简体中文](README.zh.md) • [日本語](README.ja.md) • [한국어](README.ko.md)**
 
 ---
 
@@ -21,11 +21,21 @@
 
 ## 🌟 Présentation
 
-**AITranslator** est un utilitaire Windows moderne et ultra-rapide qui intègre la traduction par intelligence artificielle, la capture OCR d'écran et l'amélioration de vos écrits dans toutes vos applications favorites.
+**TranslateAI** est un utilitaire Windows moderne et ultra-rapide qui intègre la traduction par intelligence artificielle, la capture OCR d'écran, des modèles locaux `.gguf` hors-ligne et l'amélioration de vos écrits dans toutes vos applications favorites.
 
-Que vous écriviez un e-mail dans Outlook, discutiez sur Slack/Discord, développiez dans VS Code ou naviguiez sur le Web, AITranslator s'active partout grâce à des raccourcis clavier universels.
+Que vous écriviez un e-mail dans Outlook, discutiez sur Slack/Discord, développiez dans VS Code ou naviguiez sur le Web, TranslateAI s'active partout grâce à des raccourcis clavier universels.
 
 > **« No Barrier, No Border »** — Communiquez librement dans toutes les langues, partout sur votre bureau, en toute confidentialité.
+
+---
+
+## 🆕 Nouveautés de la v1.0.1
+
+- **🧠 Moteur intégré TranslateAI Engine (`.gguf`) :** Crée automatiquement un dossier `models/` à côté de l'application et exécute vos modèles `.gguf` préinstallés 100 % hors-ligne.
+- **🔌 Fournisseur OpenAI Compatible :** Nom unifié en **OpenAI Compatible** et onglets modernes stables sans flèches de défilement.
+- **🇮🇱 Interface en hébreu & support RTL complet (`עברית`) :** Ajout complet de l'hébreu avec prise en charge native de droite à gauche (RTL), soit 11 langues d'interface.
+- **🎨 Finitions visuelles et ergonomie :** Cases à cocher avec coches vectorielles nettes, noms de langues épurés sans mentions entre parenthèses et notes d'aide grises sous chaque raccourci.
+- **🏷️ Identité officielle TranslateAI :** Nommage unifié et exécutable mis à jour vers `TranslateAI.exe`.
 
 ---
 
@@ -34,9 +44,9 @@ Que vous écriviez un e-mail dans Outlook, discutiez sur Slack/Discord, dévelop
 Aucune connaissance technique ni installation de Python n'est requise :
 
 1. Rendez-vous dans la section **[Releases (Versions)](https://github.com/eYushaa/AI-Translator/releases)** sur GitHub.
-2. Téléchargez le programme d'installation **`AITranslator-Setup.exe`** ou la version portable **`AITranslator.exe`**.
-3. Lancez l'installation et ouvrez l'application.
-4. Le programme démarre discrètement dans la **barre des tâches** (près de l'horloge).
+2. Téléchargez **`TranslateAI-Setup.exe`** et lancez l'application d'installation.
+3. Choisissez le modèle d'IA souhaité pendant l'installation et terminez le téléchargement.
+4. Et voilà **TranslateAI** prêt à l'emploi dans votre **barre des tâches Windows** !
 
 ---
 
@@ -59,10 +69,11 @@ Aucune connaissance technique ni installation de Python n'est requise :
 
 ---
 
-### 🤖 3. Modèles d'IA Multi-Fournisseurs
-- **LLM Locaux (Ollama / LocalAI / vLLM) :** Confidentialité totale via API compatible OpenAI (`http://localhost:11434/v1`).
+### 🤖 3. Modèles d'IA Multi-Fournisseurs & Moteur GGUF
+- **TranslateAI Engine (`.gguf` intégré) :** Exécute les modèles `.gguf` du dossier `models/` 100 % hors-ligne sans serveur externe.
+- **OpenAI Compatible (Ollama / LocalAI / vLLM) :** Confidentialité totale via API compatible OpenAI (`http://localhost:11434/v1`).
 - **LM Studio :** Prise en charge directe des modèles locaux (`http://localhost:1234/v1`).
-- **Google Gemini :** Traduction cloud haute fidélité via Gemini 2.5 Flash, Pro ou Lite.
+- **Google Gemini :** Traduction cloud haute fidélité via Gemini 3.8 Flash, Gemini 3.5 Flash-Lite ou Gemini 4 (Argon / Hydrogen / Carbon).
 - **Google Translate :** Prêt à l'emploi sans clé API.
 
 ---

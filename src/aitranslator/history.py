@@ -1,5 +1,5 @@
 """Çeviri geçmişi. Varsayılan olarak KAPALI. Açıksa kayıtlar yalnızca bu bilgisayarda
-``%APPDATA%\\AITranslator\\history.jsonl`` dosyasında tutulur."""
+``%APPDATA%\\TranslateAI\\history.jsonl`` dosyasında tutulur."""
 from __future__ import annotations
 
 import json

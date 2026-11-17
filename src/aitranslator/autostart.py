@@ -4,7 +4,7 @@ from __future__ import annotations
 import sys
 
 RUN_KEY = r"Software\Microsoft\Windows\CurrentVersion\Run"
-VALUE_NAME = "AITranslator"
+VALUE_NAME = "TranslateAI"
 
 
 def startup_command() -> str:

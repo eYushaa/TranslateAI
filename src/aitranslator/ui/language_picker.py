@@ -59,8 +59,9 @@ class LanguageItemWidget(QWidget):
         c = _DARK if is_dark() else _LIGHT
 
         layout = QHBoxLayout(self)
-        layout.setContentsMargins(10, 6, 10, 6)
+        layout.setContentsMargins(10, 7, 10, 7)
         layout.setSpacing(10)
+        self.setMinimumHeight(52)
 
         # Dil Kodu Rozeti (örn. [TR], [EN], [DE])
         self.badge = QLabel(code.upper())
@@ -97,7 +98,7 @@ class LanguageItemWidget(QWidget):
             sub_text = native_name if native_name != tr_name else en_name
         else:
             primary_name = native_name
-            sub_text = en_name if native_name != en_name else tr_name
+            sub_text = en_name if native_name != en_name else ""
 
         self.lbl_name = QLabel(primary_name)
         self.lbl_name.setStyleSheet(f"font-weight: {'700' if is_active else '500'}; font-size: 10pt; color: {c['text']};")
@@ -167,6 +168,7 @@ class LanguagePickerWindow(QWidget):
 
         self.card = QFrame()
         self.card.setObjectName("LanguagePickerCard")
+        self.card.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
 
         shadow = QGraphicsDropShadowEffect(self)
         shadow.setBlurRadius(28)
@@ -303,6 +305,24 @@ class LanguagePickerWindow(QWidget):
             QListWidget::item:selected {{
                 background: {c['hover']};
                 border: 1px solid {ACCENT};
+            }}
+            QScrollBar:vertical {{
+                background: transparent;
+                width: 8px;
+                margin: 2px 0;
+            }}
+            QScrollBar::handle:vertical {{
+                background: {c['border']};
+                border-radius: 4px;
+                min-height: 24px;
+            }}
+            QScrollBar::handle:vertical:hover {{
+                background: {c['muted']};
+            }}
+            QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical,
+            QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {{
+                background: transparent;
+                height: 0px;
             }}
         """)
         self.btn_select.setStyleSheet(f"""

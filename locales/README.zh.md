@@ -1,19 +1,19 @@
 <div align="center">
 
-# 🌐 AITranslator
+# 🌐 TranslateAI
 
 ### **No Barrier, No Border**
 
 *专为 Windows 10 与 11 打造的现代全局 AI 翻译、屏幕 OCR 与写作润色助手。*
 
 [![Platform](https://img.shields.io/badge/Platform-Windows%2010%20%2F%2011-0078D6?logo=windows&logoColor=white)](https://microsoft.com/windows)
-[![Release](https://img.shields.io/badge/Release-v1.0.0-success?logo=github)](https://github.com/eYushaa/AI-Translator/releases)
+[![Release](https://img.shields.io/badge/Release-v1.0.1-success?logo=github)](https://github.com/eYushaa/AI-Translator/releases)
 [![PySide6](https://img.shields.io/badge/GUI-PySide6%20%2F%20Qt-41CD52?logo=qt&logoColor=white)](https://www.qt.io/)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](../LICENSE)
 
 ---
 
-**[English](../README.md) • [Türkçe](README.tr.md) • [Español](README.es.md) • [Français](README.fr.md) • [Deutsch](README.de.md) • [Русский](README.ru.md) • [العربية](README.ar.md) • [简体中文](README.zh.md) • [日本語](README.ja.md) • [한국어](README.ko.md)**
+**[English](../README.md) • [Türkçe](README.tr.md) • [Español](README.es.md) • [Français](README.fr.md) • [Deutsch](README.de.md) • [Русский](README.ru.md) • [العربية](README.ar.md) • [עברית](README.he.md) • [简体中文](README.zh.md) • [日本語](README.ja.md) • [한국어](README.ko.md)**
 
 ---
 
@@ -21,11 +21,21 @@
 
 ## 🌟 简介
 
-**AITranslator** 是一款功能强大、响应极速的 Windows 系统级翻译工具，可在操作系统任意角落为您提供高质量的 AI 翻译、屏幕截屏文字识别（OCR）以及地道的文本润色与纠错。
+**TranslateAI** 是一款功能强大、响应极速的 Windows 系统级翻译工具，可在操作系统任意角落为您提供高质量的 AI 翻译、本地 `.gguf` 离线推理、屏幕截屏文字识别（OCR）以及地道的文本润色与纠错。
 
-无论您是在 Outlook 中撰写邮件、在 Slack/Discord 聊天、在 VS Code 中编写代码，还是在浏览器中阅读文献，AITranslator 都能通过简单顺手的全局快捷键无缝融入您的工作流。
+无论您是在 Outlook 中撰写邮件、在 Slack/Discord 聊天、在 VS Code 中编写代码，还是在浏览器中阅读文献，TranslateAI 都能通过简单顺手的全局快捷键无缝融入您的工作流。
 
 > **“No Barrier, No Border”** —— 跨越语言障碍，畅通无阻，保障极致隐私。
+
+---
+
+## 🆕 v1.0.1 更新内容
+
+- **🧠 内置 TranslateAI Engine（`.gguf` 推理引擎）：** 在应用目录自动创建 `models/` 文件夹，无需外部服务即可 100% 离线直接运行预装的 `.gguf` 模型。
+- **🔌 OpenAI Compatible 提供方：** 将本地/兼容接口提供方统一命名为 **OpenAI Compatible**，并采用无滚动箭头、等宽稳定的胶囊选项卡。
+- **🇮🇱 新增希伯来语界面与完整 RTL 支持（`עברית`）：** 新增完整的希伯来语界面及原生从右到左（RTL）排版，共支持 11 种界面语言。
+- **🎨 界面细节全面打磨：** 复选框采用清晰矢量勾选图标、语言选择器移除冗余括号后缀，并在快捷键标题下方展示灰色说明注释。
+- **🏷️ 正式更名为 TranslateAI：** 统一应用名称、数据路径及可执行文件（`TranslateAI.exe`）。
 
 ---
 
@@ -34,9 +44,9 @@
 无需安装 Python、打开终端或进行复杂的命令行配置：
 
 1. 前往 GitHub 仓库的 **[Releases (发布页面)](https://github.com/eYushaa/AI-Translator/releases)**。
-2. 下载 **`AITranslator-Setup.exe`**（安装包）或单文件免安装版 **`AITranslator.exe`**。
-3. 运行并完成安装，启动应用程序。
-4. 软件将静默驻留在右下角的 **Windows 系统托盘**（时钟旁），随时待命！
+2. 下载 **`TranslateAI-Setup.exe`** 并运行安装程序。
+3. 在安装过程中选择所需的 AI 模型并完成下载。
+4. 就是现在，**TranslateAI** 已在您的 **Windows 系统托盘** 中准备就绪！
 
 ---
 
@@ -59,10 +69,11 @@
 
 ---
 
-### 🤖 3. 多模型与本地大语言模型（LLM）支持
-- **本地大模型（Ollama / LocalAI / vLLM）：** 通过 OpenAI 兼容 API (`http://localhost:11434/v1`) 实现 100% 离线、纯私密推理。
+### 🤖 3. 多模型提供方与内置 GGUF 离线引擎
+- **TranslateAI Engine（内置 `.gguf`）：** 直接调用 `models/` 文件夹内的 `.gguf` 模型实现 100% 离线翻译。
+- **OpenAI Compatible（Ollama / LocalAI / vLLM）：** 通过 OpenAI 兼容 API (`http://localhost:11434/v1`) 实现 100% 离线、纯私密推理。
 - **LM Studio：** 一键直连本地部署的模型服务 (`http://localhost:1234/v1`)。
-- **Google Gemini：** 支持 Gemini 2.5 Flash / Pro 高速云端翻译（使用个人 API 密钥）。
+- **Google Gemini：** 支持 Gemini 3.8 Flash、Gemini 3.5 Flash-Lite 与 Gemini 4（Argon / Hydrogen / Carbon）高速云端翻译（使用个人 API 密钥）。
 - **Google Translate：** 开箱即用，无需配置任何 API 密钥。
 
 ---

@@ -10,10 +10,13 @@ from .prompts import (
     clean_llm_output,
     system_prompt,
 )
+from .translateai_engine import TranslateAIEngineProvider, clear_engine_cache
 
 __all__ = [
     "ProviderError",
     "ProviderInterface",
+    "TranslateAIEngineProvider",
+    "clear_engine_cache",
     "GeminiProvider",
     "GoogleTranslateProvider",
     "LMStudioProvider",

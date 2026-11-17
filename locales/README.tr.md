@@ -1,19 +1,19 @@
 <div align="center">
 
-# 🌐 AITranslator
+# 🌐 TranslateAI
 
 ### **No Barrier, No Border**
 
 *Windows 10 ve 11 için modern, sistem geneli yapay zeka çeviri, OCR ve metin asistanı.*
 
 [![Platform](https://img.shields.io/badge/Platform-Windows%2010%20%2F%2011-0078D6?logo=windows&logoColor=white)](https://microsoft.com/windows)
-[![Release](https://img.shields.io/badge/Release-v1.0.0-success?logo=github)](https://github.com/eYushaa/AI-Translator/releases)
+[![Release](https://img.shields.io/badge/Release-v1.0.1-success?logo=github)](https://github.com/eYushaa/AI-Translator/releases)
 [![PySide6](https://img.shields.io/badge/GUI-PySide6%20%2F%20Qt-41CD52?logo=qt&logoColor=white)](https://www.qt.io/)
 [![Lisans](https://img.shields.io/badge/Lisans-MIT-blue.svg)](../LICENSE)
 
 ---
 
-**[English](../README.md) • [Türkçe](README.tr.md) • [Español](README.es.md) • [Français](README.fr.md) • [Deutsch](README.de.md) • [Русский](README.ru.md) • [العربية](README.ar.md) • [简体中文](README.zh.md) • [日本語](README.ja.md) • [한국어](README.ko.md)**
+**[English](../README.md) • [Türkçe](README.tr.md) • [Español](README.es.md) • [Français](README.fr.md) • [Deutsch](README.de.md) • [Русский](README.ru.md) • [العربية](README.ar.md) • [עברית](README.he.md) • [简体中文](README.zh.md) • [日本語](README.ja.md) • [한국어](README.ko.md)**
 
 ---
 
@@ -21,11 +21,21 @@
 
 ## 🌟 Genel Bakış
 
-**AITranslator**, yüksek kaliteli yapay zeka çevirisini, ekrandan kırparak metin tanıma (OCR) özelliğini ve profesyonel metin parlatma yeteneklerini Windows sisteminizin her yerine getiren yeni nesil bir masaüstü uygulamasıdır.
+**TranslateAI**, yüksek kaliteli yapay zeka çevirisini, ekrandan kırparak metin tanıma (OCR) özelliğini, çevrimdışı `.gguf` yerel modellerini ve profesyonel metin parlatma yeteneklerini Windows sisteminizin her yerine getiren yeni nesil bir masaüstü uygulamasıdır.
 
 Outlook'ta e-posta yazarken, Slack veya Discord'da mesajlaşırken, VS Code'da kod geliştirirken ya da internette gezinirken; kısayol tuşlarıyla işletim sisteminin herhangi bir yerinde doğrudan çalışır.
 
 > **"No Barrier, No Border"** — Dil engellerini ve sınırları ortadan kaldırarak masaüstünüzde tam gizlilik ve sıfır sürtünmeyle özgürce iletişim kurun.
+
+---
+
+## 🆕 v1.0.1 Yenilikleri
+
+- **🧠 Dahili TranslateAI Engine (`.gguf` Motoru):** Uygulama dizininde otomatik `models/` klasörü oluşturur ve önceden kurulmuş `.gguf` modellerini harici sunucu gerekmeden %100 çevrimdışı çalıştırır.
+- **🔌 OpenAI Compatible Sağlayıcı:** Yerel/özel uç nokta sağlayıcısı **OpenAI Compatible** adıyla sadeleştirildi; sağlayıcı sekmeleri kaydırma okları ve boyut oynaması olmadan modern hap (pill) tasarımına geçirildi.
+- **🇮🇱 İbranice Arayüz ve Tam RTL Desteği (`עברית`):** Arapçanın yanı sıra sağdan sola (RTL) düzen desteğiyle tam İbranice arayüz eklendi (toplam 11 arayüz dili).
+- **🎨 Arayüz İyileştirmeleri:** Onay kutularında net vektörel tik işaretleri, dil seçicide gereksiz Türkçe parantezlerin kaldırılması ve Kısayollar sayfasında her başlığın altında bilgilendirici gri açıklamalar eklendi.
+- **🏷️ Resmi Ad Güncellemesi (TranslateAI):** Uygulama adı, çalıştırılabilir dosya (`TranslateAI.exe`) ve ayar dizini **TranslateAI** olarak birleştirildi.
 
 ---
 
@@ -34,9 +44,9 @@ Outlook'ta e-posta yazarken, Slack veya Discord'da mesajlaşırken, VS Code'da k
 Python, terminal veya karmaşık teknik ayarlarla uğraşmanıza gerek yoktur:
 
 1. GitHub üzerindeki **[Releases (Sürümler)](https://github.com/eYushaa/AI-Translator/releases)** sayfasına gidin.
-2. **`AITranslator-Setup.exe`** (Kurulum Sihirbazı) veya taşınabilir **`AITranslator.exe`** dosyasını indirin.
-3. Dosyayı çalıştırıp kurulumu tamamlayın.
-4. Uygulama **Windows Sistem Tepsisi**'nde (saatin yanında) sessizce başlar. Kısayollarınız kullanıma hazırdır!
+2. **`TranslateAI-Setup.exe`** dosyasını indirin ve kurulumu çalıştırın.
+3. Kurulum sırasında kullanmak istediğiniz yapay zeka modelini seçip indirmeyi tamamlayın.
+4. İşte **TranslateAI** karşınızda! Uygulama **Windows Sistem Tepsisi**'nde kullanıma hazırdır.
 
 ---
 
@@ -60,11 +70,12 @@ Python, terminal veya karmaşık teknik ayarlarla uğraşmanıza gerek yoktur:
 
 ---
 
-### 🤖 3. Çoklu Sağlayıcı Mimarisi ve Otomatik Yedekleme
-İster yerel ister bulut tabanlı yapay zeka modellerinizi bağlayın:
-- **Yerel LLM'ler (Ollama / LocalAI / vLLM):** OpenAI uyumlu yerel sunucular (`http://localhost:11434/v1`) üzerinden %100 çevrimdışı ve gizli çeviri.
+### 🤖 3. Çoklu Sağlayıcı Mimarisi ve Dahili GGUF Motoru
+İster dahili çevrimdışı modellerle ister yerel sunucu veya bulut modellerinizle çalışın:
+- **TranslateAI Engine (Dahili `.gguf`):** `models/` klasöründeki `.gguf` modellerini doğrudan uygulama içinde %100 çevrimdışı çalıştırır.
+- **OpenAI Compatible (Ollama / LocalAI / vLLM):** OpenAI uyumlu sunucular (`http://localhost:11434/v1`) üzerinden yerel ve gizli çeviri.
 - **LM Studio:** Model listeleme ve bağlantı testi desteğiyle doğrudan entegrasyon (`http://localhost:1234/v1`).
-- **Google Gemini:** Kendi API anahtarınızla Gemini 2.5 Flash, Pro ve Lite modelleriyle ultra hızlı çeviri.
+- **Google Gemini:** Kendi API anahtarınızla Gemini 3.8 Flash, Gemini 3.5 Flash-Lite ve Gemini 4 (Argon / Hydrogen / Carbon) modelleriyle ultra hızlı çeviri.
 - **Google Translate:** API anahtarı gerektirmeyen hazır çeviri motoru ve resmî Cloud Translation API desteği.
 - **Otomatik Yedekleme Zinciri (Fallback):** Bir sağlayıcı çevrimdışı olduğunda istek otomatik olarak belirlediğiniz diğer sağlayıcıya yönlendirilir.
 
@@ -81,9 +92,9 @@ Python, terminal veya karmaşık teknik ayarlarla uğraşmanıza gerek yoktur:
 
 ---
 
-### 🌍 5. 10 Farklı Arayüz Dili ve Sağdan Sola (RTL) Desteği
+### 🌍 5. 11 Farklı Arayüz Dili ve Sağdan Sola (RTL) Desteği
 Ayarlar penceresinin sol altındaki dil seçiciden uygulamanın tüm arayüzünü anında değiştirebilirsiniz:
-- 🇹🇷 Türkçe • 🇬🇧 English • 🇫🇷 Français • 🇩🇪 Deutsch • 🇪🇸 Español • 🇷🇺 Русский • 🇸🇦 العربية *(Tam RTL)* • 🇨🇳 简体中文 • 🇯🇵 日本語 • 🇰🇷 한국어
+- 🇹🇷 Türkçe • 🇬🇧 English • 🇫🇷 Français • 🇩🇪 Deutsch • 🇪🇸 Español • 🇷🇺 Русский • 🇸🇦 العربية *(Tam RTL)* • 🇮🇱 עברית *(Tam RTL)* • 🇨🇳 简体中文 • 🇯🇵 日本語 • 🇰🇷 한국어
 
 ---
 

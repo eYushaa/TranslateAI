@@ -5,8 +5,8 @@ import copy
 import threading
 import time
 
-from PySide6.QtCore import Qt, Signal
-from PySide6.QtGui import QGuiApplication, QKeySequence
+from PySide6.QtCore import Qt, QUrl, Signal
+from PySide6.QtGui import QDesktopServices, QGuiApplication, QKeySequence
 from PySide6.QtWidgets import (
     QAbstractItemView, QCheckBox, QComboBox, QFormLayout, QHBoxLayout, QHeaderView, QLabel, QLineEdit,
     QListWidget, QMainWindow, QMessageBox, QPlainTextEdit, QPushButton, QScrollArea, QStackedWidget, QTableWidget,
@@ -20,10 +20,10 @@ from ..i18n import (
 )
 from ..languages import LanguageService
 from ..ocr import OcrService
-from ..paths import data_dir, history_path, log_path
+from ..paths import data_dir, history_path, log_path, models_dir
 from ..providers import (
     DEFAULT_SYSTEM_PROMPT, GeminiProvider, GoogleTranslateProvider, LMStudioProvider, LocalLLMProvider,
-    PROMPT_PRESETS, ProviderError,
+    PROMPT_PRESETS, ProviderError, TranslateAIEngineProvider,
 )
 from ..secure_storage import MemoryBackend, SecureStorage
 from ..settings import OcrSettings, PROVIDER_IDS, PROVIDER_LABELS, Settings
@@ -33,8 +33,20 @@ from .widgets import Card, LanguageCombo, muted_label, primary_button, secret_ed
 PAGE_KEYS = ["page_general", "page_languages", "page_ocr", "page_providers", "page_hotkeys", "page_privacy", "page_history"]
 PAGES = ["Genel", "Diller", "OCR / Ekran Alıntısı", "Sağlayıcılar", "Kısayollar", "Gizlilik", "Geçmiş"]
 SECRET_FOR = {"local_llm": "local_llm_api_key", "lmstudio": "lmstudio_api_key", "gemini": "gemini_api_key", "google": "google_cloud_api_key"}
-PROVIDER_CLASSES = {"local_llm": LocalLLMProvider, "lmstudio": LMStudioProvider, "gemini": GeminiProvider, "google": GoogleTranslateProvider}
-GEMINI_SUGGESTIONS = ["gemini-2.5-flash", "gemini-2.5-flash-lite", "gemini-2.5-pro"]
+PROVIDER_CLASSES = {
+    "translateai": TranslateAIEngineProvider,
+    "local_llm": LocalLLMProvider,
+    "lmstudio": LMStudioProvider,
+    "gemini": GeminiProvider,
+    "google": GoogleTranslateProvider,
+}
+GEMINI_SUGGESTIONS = [
+    "gemini-3.8-flash",
+    "gemini-3.5-flash-lite",
+    "gemini-4-argon",
+    "gemini-4-hydrogen",
+    "gemini-4-carbon",
+]
 
 
 def _scroll(inner: QWidget) -> QScrollArea:
@@ -89,9 +101,8 @@ class SettingsWindow(QMainWindow):
 
         self.cmb_ui_lang = QComboBox()
         self.cmb_ui_lang.setObjectName("LanguageBar")
-        for code, native, tr_name in UI_LANGUAGES:
-            disp = f"{native} ({tr_name})" if native != tr_name else native
-            self.cmb_ui_lang.addItem(disp, code)
+        for code, native, _tr_name in UI_LANGUAGES:
+            self.cmb_ui_lang.addItem(native, code)
         self.cmb_ui_lang.currentIndexChanged.connect(self._on_ui_language_selected)
         bottom_layout.addWidget(self.cmb_ui_lang)
 
@@ -406,6 +417,10 @@ class SettingsWindow(QMainWindow):
 
         self.pw: dict[str, dict] = {}
         self.tabs_providers = QTabWidget()
+        tb = self.tabs_providers.tabBar()
+        tb.setUsesScrollButtons(False)
+        tb.setExpanding(False)
+        self.tabs_providers.addTab(self._translateai_tab(), provider_label("translateai"))
         self.tabs_providers.addTab(self._openai_tab("local_llm", "http://localhost:11434/v1", "note_local_llm"), provider_label("local_llm"))
         self.tabs_providers.addTab(self._openai_tab("lmstudio", "http://localhost:1234/v1", "note_lmstudio"), provider_label("lmstudio"))
         self.tabs_providers.addTab(self._gemini_tab(), provider_label("gemini"))
@@ -453,6 +468,49 @@ class SettingsWindow(QMainWindow):
         edit.clear()
         edit.setPlaceholderText(t("key_placeholder_delete"))
 
+    def _translateai_tab(self) -> QWidget:
+        pid = "translateai"
+        self.pw[pid] = {}
+        w = QWidget()
+        lay = QVBoxLayout(w)
+        lay.setContentsMargins(0, 12, 0, 0)
+        card = Card()
+        form = QFormLayout()
+        form.setVerticalSpacing(12)
+
+        dir_edit = QLineEdit(str(models_dir()))
+        dir_edit.setReadOnly(True)
+        btn_open_dir = QPushButton(t("btn_open_models_dir"))
+        btn_open_dir.clicked.connect(lambda: QDesktopServices.openUrl(QUrl.fromLocalFile(str(models_dir()))))
+        dir_box = QHBoxLayout()
+        dir_box.addWidget(dir_edit, 1)
+        dir_box.addWidget(btn_open_dir)
+        lbl_dir = QLabel(t("lbl_models_dir"))
+        form.addRow(lbl_dir, dir_box)
+
+        model = QComboBox()
+        model.setEditable(False)
+        lbl_model = QLabel(t("lbl_model"))
+        form.addRow(lbl_model, model)
+
+        self.pw[pid].update(
+            dir_edit=dir_edit,
+            btn_open_dir=btn_open_dir,
+            lbl_dir=lbl_dir,
+            model=model,
+            lbl_model=lbl_model,
+        )
+        card.root.addLayout(form)
+        note_lbl = muted_label(t("note_translateai"))
+        card.root.addWidget(note_lbl)
+        btn_layout, btns = self._buttons(pid, True)
+        card.root.addLayout(btn_layout)
+        card.root.addWidget(self._result_label(pid))
+        lay.addWidget(card)
+        lay.addStretch(1)
+        self._provider_tab_widgets.append((pid, note_lbl, btns))
+        return w
+
     def _openai_tab(self, pid: str, url_hint: str, note_key: str) -> QWidget:
         self.pw[pid] = {}
         w = QWidget()
@@ -479,6 +537,7 @@ class SettingsWindow(QMainWindow):
         card.root.addLayout(btn_layout)
         card.root.addWidget(self._result_label(pid))
         lay.addWidget(card)
+        lay.addStretch(1)
         self._provider_tab_widgets.append((pid, note_lbl, btns))
         return w
 
@@ -509,6 +568,7 @@ class SettingsWindow(QMainWindow):
         card.root.addLayout(btn_layout)
         card.root.addWidget(self._result_label(pid))
         lay.addWidget(card)
+        lay.addStretch(1)
         self._provider_tab_widgets.append((pid, note_lbl, btns))
         return w
 
@@ -533,6 +593,7 @@ class SettingsWindow(QMainWindow):
         card.root.addLayout(btn_layout)
         card.root.addWidget(self._result_label(pid))
         lay.addWidget(card)
+        lay.addStretch(1)
         self._provider_tab_widgets.append((pid, note, btns))
         return w
 
@@ -541,8 +602,12 @@ class SettingsWindow(QMainWindow):
         card = Card()
         self.chk_hk_enabled = QCheckBox(t("chk_hk_enabled"))
         card.root.addWidget(self.chk_hk_enabled)
-        form = QFormLayout()
-        form.setVerticalSpacing(12)
+        card.root.addSpacing(4)
+
+        self.hk_rows_layout = QVBoxLayout()
+        self.hk_rows_layout.setContentsMargins(0, 0, 0, 0)
+        self.hk_rows_layout.setSpacing(14)
+
         self.key_b = QKeySequenceEdit()
         self.key_n = QKeySequenceEdit()
         self.key_m = QKeySequenceEdit()
@@ -562,27 +627,49 @@ class SettingsWindow(QMainWindow):
         self.lbl_hk_o = QLabel("")
         for lab in (self.lbl_hk_b, self.lbl_hk_n, self.lbl_hk_m, self.lbl_hk_v, self.lbl_hk_c, self.lbl_hk_o):
             lab.setWordWrap(True)
+            lab.setStyleSheet("font-size: 8.5pt;")
+            lab.setVisible(False)
 
-        self.lbl_row_hk_b = QLabel(t("lbl_hk_b"))
-        self.lbl_row_hk_n = QLabel(t("lbl_hk_n"))
-        self.lbl_row_hk_m = QLabel(t("lbl_hk_m"))
-        self.lbl_row_hk_v = QLabel(t("lbl_hk_v"))
-        self.lbl_row_hk_c = QLabel(t("lbl_hk_c"))
-        self.lbl_row_hk_o = QLabel(t("lbl_hk_o"))
+        def _make_hk_row(title_key: str, tip_key: str, key_edit: QKeySequenceEdit, status_lbl: QLabel) -> tuple[QLabel, QLabel]:
+            row = QHBoxLayout()
+            row.setContentsMargins(0, 2, 0, 2)
+            row.setSpacing(24)
 
-        form.addRow(self.lbl_row_hk_b, self.key_b)
-        form.addRow("", self.lbl_hk_b)
-        form.addRow(self.lbl_row_hk_n, self.key_n)
-        form.addRow("", self.lbl_hk_n)
-        form.addRow(self.lbl_row_hk_o, self.key_o)
-        form.addRow("", self.lbl_hk_o)
-        form.addRow(self.lbl_row_hk_m, self.key_m)
-        form.addRow("", self.lbl_hk_m)
-        form.addRow(self.lbl_row_hk_v, self.key_v)
-        form.addRow("", self.lbl_hk_v)
-        form.addRow(self.lbl_row_hk_c, self.key_c)
-        form.addRow("", self.lbl_hk_c)
-        card.root.addLayout(form)
+            vbox = QVBoxLayout()
+            vbox.setContentsMargins(0, 0, 0, 0)
+            vbox.setSpacing(3)
+
+            lbl_title = QLabel(t(title_key))
+            lbl_title.setStyleSheet("font-weight: 600; font-size: 9.5pt;")
+            vbox.addWidget(lbl_title)
+
+            lbl_tip = QLabel(t(tip_key))
+            lbl_tip.setObjectName("Subtle")
+            lbl_tip.setStyleSheet("font-size: 8.5pt;")
+            lbl_tip.setWordWrap(True)
+            vbox.addWidget(lbl_tip)
+
+            row.addLayout(vbox, 1)
+
+            right_col = QVBoxLayout()
+            right_col.setContentsMargins(0, 0, 0, 0)
+            right_col.setSpacing(3)
+            key_edit.setFixedWidth(220)
+            right_col.addWidget(key_edit)
+            right_col.addWidget(status_lbl)
+
+            row.addLayout(right_col, 0)
+            self.hk_rows_layout.addLayout(row)
+            return lbl_title, lbl_tip
+
+        self.lbl_row_hk_b, self.lbl_tip_hk_b = _make_hk_row("lbl_hk_b", "lbl_hk_b_tip", self.key_b, self.lbl_hk_b)
+        self.lbl_row_hk_n, self.lbl_tip_hk_n = _make_hk_row("lbl_hk_n", "lbl_hk_n_tip", self.key_n, self.lbl_hk_n)
+        self.lbl_row_hk_o, self.lbl_tip_hk_o = _make_hk_row("lbl_hk_o", "lbl_hk_o_tip", self.key_o, self.lbl_hk_o)
+        self.lbl_row_hk_m, self.lbl_tip_hk_m = _make_hk_row("lbl_hk_m", "lbl_hk_m_tip", self.key_m, self.lbl_hk_m)
+        self.lbl_row_hk_v, self.lbl_tip_hk_v = _make_hk_row("lbl_hk_v", "lbl_hk_v_tip", self.key_v, self.lbl_hk_v)
+        self.lbl_row_hk_c, self.lbl_tip_hk_c = _make_hk_row("lbl_hk_c", "lbl_hk_c_tip", self.key_c, self.lbl_hk_c)
+
+        card.root.addLayout(self.hk_rows_layout)
 
         self.btn_reset_hotkeys = QPushButton(t("btn_reset_hotkeys"))
         self.btn_reset_hotkeys.clicked.connect(self._reset_hotkeys)
@@ -754,13 +841,24 @@ class SettingsWindow(QMainWindow):
         self.warn_fallback.setText(t("providers_fallback_warn"))
 
         # Sağlayıcı sekmeleri
-        self.tabs_providers.setTabText(0, provider_label("local_llm"))
-        self.tabs_providers.setTabText(1, provider_label("lmstudio"))
-        self.tabs_providers.setTabText(2, provider_label("gemini"))
-        self.tabs_providers.setTabText(3, provider_label("google"))
+        self.tabs_providers.setTabText(0, provider_label("translateai"))
+        self.tabs_providers.setTabText(1, provider_label("local_llm"))
+        self.tabs_providers.setTabText(2, provider_label("lmstudio"))
+        self.tabs_providers.setTabText(3, provider_label("gemini"))
+        self.tabs_providers.setTabText(4, provider_label("google"))
 
         for pid, note_lbl, btns in self._provider_tab_widgets:
-            if pid == "local_llm":
+            if pid == "translateai":
+                note_lbl.setText(t("note_translateai"))
+                self.pw[pid]["lbl_dir"].setText(t("lbl_models_dir"))
+                self.pw[pid]["btn_open_dir"].setText(t("btn_open_models_dir"))
+                self.pw[pid]["lbl_model"].setText(t("lbl_model"))
+                btns[0].setText(t("btn_list_models"))
+                btns[1].setText(t("btn_test_conn"))
+                combo: QComboBox = self.pw[pid]["model"]
+                if combo.count() == 1 and combo.itemData(0) == "":
+                    combo.setItemText(0, t("translateai_no_models"))
+            elif pid == "local_llm":
                 note_lbl.setText(t("note_local_llm"))
                 self.pw[pid]["lbl_url"].setText(t("lbl_api_url"))
                 self.pw[pid]["lbl_model"].setText(t("lbl_model_name"))
@@ -801,11 +899,17 @@ class SettingsWindow(QMainWindow):
         # Kısayollar sayfası
         self.chk_hk_enabled.setText(t("chk_hk_enabled"))
         self.lbl_row_hk_b.setText(t("lbl_hk_b"))
+        self.lbl_tip_hk_b.setText(t("lbl_hk_b_tip"))
         self.lbl_row_hk_n.setText(t("lbl_hk_n"))
+        self.lbl_tip_hk_n.setText(t("lbl_hk_n_tip"))
         self.lbl_row_hk_o.setText(t("lbl_hk_o"))
+        self.lbl_tip_hk_o.setText(t("lbl_hk_o_tip"))
         self.lbl_row_hk_m.setText(t("lbl_hk_m"))
+        self.lbl_tip_hk_m.setText(t("lbl_hk_m_tip"))
         self.lbl_row_hk_v.setText(t("lbl_hk_v"))
+        self.lbl_tip_hk_v.setText(t("lbl_hk_v_tip"))
         self.lbl_row_hk_c.setText(t("lbl_hk_c"))
+        self.lbl_tip_hk_c.setText(t("lbl_hk_c_tip"))
         self.btn_reset_hotkeys.setText(t("btn_reset_hotkeys"))
         self.lbl_hk_note.setText(t("hotkeys_note"))
         self._update_hotkey_status()
@@ -869,6 +973,7 @@ class SettingsWindow(QMainWindow):
 
         self.cmb_active.setCurrentIndex(max(0, self.cmb_active.findData(s.providers.active)))
         self.chk_fallback.setChecked(s.providers.auto_fallback)
+        self._populate_translateai_models(selected=s.providers.translateai.model)
         for pid in ("local_llm", "lmstudio", "gemini"):
             ep = getattr(s.providers, pid)
             self.pw[pid]["url"].setText(ep.base_url)
@@ -913,6 +1018,8 @@ class SettingsWindow(QMainWindow):
         s.ocr.target_language = ocr_target if ocr_target else ""
         s.providers.active = self.cmb_active.currentData()
         s.providers.auto_fallback = self.chk_fallback.isChecked()
+        tai_data = self.pw["translateai"]["model"].currentData()
+        s.providers.translateai.model = tai_data if isinstance(tai_data, str) else ""
         for pid in ("local_llm", "lmstudio", "gemini"):
             ep = getattr(s.providers, pid)
             ep.base_url = self.pw[pid]["url"].text().strip()
@@ -992,12 +1099,15 @@ class SettingsWindow(QMainWindow):
             msg = st.get(key)
             if not st:
                 lab.setText("")
+                lab.setVisible(False)
             elif msg:
                 lab.setObjectName("Err")
                 lab.setText("⚠ " + msg)
+                lab.setVisible(True)
             else:
                 lab.setObjectName("Ok")
                 lab.setText(t("hk_registered"))
+                lab.setVisible(True)
             lab.style().unpolish(lab)
             lab.style().polish(lab)
 
@@ -1059,11 +1169,39 @@ class SettingsWindow(QMainWindow):
 
         threading.Thread(target=work, daemon=True).start()
 
+    def _populate_translateai_models(self, models: list[str] | None = None, selected: str | None = None) -> None:
+        self.pw["translateai"]["dir_edit"].setText(str(models_dir()))
+        combo: QComboBox = self.pw["translateai"]["model"]
+        if selected is None:
+            cur = combo.currentData()
+            selected = cur if isinstance(cur, str) else ""
+        items = TranslateAIEngineProvider.scan_models() if models is None else models
+        combo.blockSignals(True)
+        combo.clear()
+        if items:
+            for m in items:
+                combo.addItem(m, m)
+            idx = combo.findData(selected) if selected else -1
+            combo.setCurrentIndex(idx if idx >= 0 else 0)
+        else:
+            combo.addItem(t("translateai_no_models"), "")
+            combo.setCurrentIndex(0)
+        combo.blockSignals(False)
+
     def _on_models_loaded(self, pid: str, models: list, error: str) -> None:
         if error:
             self._set_result(pid, "✗ " + error, False)
             return
         combo: QComboBox = self.pw[pid]["model"]
+        if pid == "translateai":
+            cur = combo.currentData()
+            selected = cur if isinstance(cur, str) and cur in models else ""
+            self._populate_translateai_models(models=models, selected=selected)
+            if models:
+                self._set_result(pid, t("status_models_found", count=len(models)), True)
+            else:
+                self._set_result(pid, t("translateai_no_models"), False)
+            return
         current = combo.currentText()
         combo.clear()
         combo.addItems(models)

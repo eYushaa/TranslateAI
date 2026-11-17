@@ -1,19 +1,19 @@
 <div align="center">
 
-# 🌐 AITranslator
+# 🌐 TranslateAI
 
 ### **No Barrier, No Border**
 
 *Современный общесистемный ассистент для перевода через ИИ, распознавания текста (OCR) и улучшения текстов для Windows 10 и 11.*
 
 [![Платформа](https://img.shields.io/badge/Платформа-Windows%2010%20%2F%2011-0078D6?logo=windows&logoColor=white)](https://microsoft.com/windows)
-[![Релиз](https://img.shields.io/badge/Релиз-v1.0.0-success?logo=github)](https://github.com/eYushaa/AI-Translator/releases)
+[![Релиз](https://img.shields.io/badge/Релиз-v1.0.1-success?logo=github)](https://github.com/eYushaa/AI-Translator/releases)
 [![PySide6](https://img.shields.io/badge/Интерфейс-PySide6%20%2F%20Qt-41CD52?logo=qt&logoColor=white)](https://www.qt.io/)
 [![Лицензия](https://img.shields.io/badge/Лицензия-MIT-blue.svg)](../LICENSE)
 
 ---
 
-**[English](../README.md) • [Türkçe](README.tr.md) • [Español](README.es.md) • [Français](README.fr.md) • [Deutsch](README.de.md) • [Русский](README.ru.md) • [العربية](README.ar.md) • [简体中文](README.zh.md) • [日本語](README.ja.md) • [한국어](README.ko.md)**
+**[English](../README.md) • [Türkçe](README.tr.md) • [Español](README.es.md) • [Français](README.fr.md) • [Deutsch](README.de.md) • [Русский](README.ru.md) • [العربية](README.ar.md) • [עברית](README.he.md) • [简体中文](README.zh.md) • [日本語](README.ja.md) • [한국어](README.ko.md)**
 
 ---
 
@@ -21,11 +21,21 @@
 
 ## 🌟 Обзор
 
-**AITranslator** — это быстрый и удобный системный инструмент для Windows, позволяющий мгновенно переводить тексты с помощью искусственного интеллекта, распознавать текст с экрана (OCR) и улучшать качество письменной речи в любых приложениях.
+**TranslateAI** — это быстрый и удобный системный инструмент для Windows, позволяющий мгновенно переводить тексты с помощью искусственного интеллекта, локальных офлайн-моделей `.gguf`, распознавать текст с экрана (OCR) и улучшать качество письменной речи в любых приложениях.
 
-Пишете ли вы письмо в Outlook, общаетесь в Slack/Discord, работаете в VS Code или читаете статьи в браузере — AITranslator всегда под рукой благодаря удобным глобальным горячим клавишам.
+Пишете ли вы письмо в Outlook, общаетесь в Slack/Discord, работаете в VS Code или читаете статьи в браузере — TranslateAI всегда под рукой благодаря удобным глобальным горячим клавишам.
 
 > **«No Barrier, No Border»** — Общайтесь без языковых барьеров и границ в любом месте рабочего стола с полной конфиденциальностью.
+
+---
+
+## 🆕 Что нового в v1.0.1
+
+- **🧠 Встроенный движок TranslateAI Engine (`.gguf`):** Автоматически создает папку `models/` рядом с приложением и запускает предзагруженные модели `.gguf` полностью офлайн без сторонних серверов.
+- **🔌 Провайдер OpenAI Compatible:** Локальный провайдер переименован в **OpenAI Compatible**, а вкладки провайдеров получили ровный дизайн без стрелок прокрутки и скачков ширины.
+- **🇮🇱 Интерфейс на иврите и поддержка RTL (`עברית`):** Добавлена полная локализация на иврит с нативной поддержкой макета справа налево (RTL) — всего 11 языков интерфейса.
+- **🎨 Обновление интерфейса:** Четкие векторные галочки в чекбоксах, чистые названия языков без пояснений в скобках и серые подсказки под названиями горячих клавиш.
+- **🏷️ Официальное имя TranslateAI:** Единое брендирование и обновленный исполняемый файл `TranslateAI.exe`.
 
 ---
 
@@ -34,9 +44,9 @@
 Установка Python или сложная настройка не требуются:
 
 1. Перейдите в раздел **[Releases (Релизы)](https://github.com/eYushaa/AI-Translator/releases)** на GitHub.
-2. Скачайте установщик **`AITranslator-Setup.exe`** или портативную версию **`AITranslator.exe`**.
-3. Запустите установку и откройте приложение.
-4. Программа начнет работу в **системном трее Windows** (возле часов). Горячие клавиши готовы к работе!
+2. Скачайте **`TranslateAI-Setup.exe`** и запустите установщик.
+3. Выберите нужную ИИ-модель в процессе установки и дождитесь завершения загрузки.
+4. И вот **TranslateAI** перед вами — программа готова к работе в **системном трее Windows**!
 
 ---
 
@@ -59,10 +69,11 @@
 
 ---
 
-### 🤖 3. Поддержка локальных и облачных нейросетей
-- **Локальные модели (Ollama / LocalAI / vLLM):** Полная приватность и автономная работа через OpenAI-совместимый API (`http://localhost:11434/v1`).
+### 🤖 3. Поддержка локальных и облачных нейросетей + встроенный движок GGUF
+- **TranslateAI Engine (встроенный `.gguf`):** Запускает модели `.gguf` из папки `models/` полностью офлайн прямо внутри приложения.
+- **OpenAI Compatible (Ollama / LocalAI / vLLM):** Полная приватность и автономная работа через OpenAI-совместимый API (`http://localhost:11434/v1`).
 - **LM Studio:** Прямая интеграция с локальными моделями (`http://localhost:1234/v1`).
-- **Google Gemini:** Облачный перевод через быстрые модели Gemini 2.5 Flash, Pro и Lite.
+- **Google Gemini:** Облачный перевод через новейшие модели Gemini 3.8 Flash, Gemini 3.5 Flash-Lite и Gemini 4 (Argon / Hydrogen / Carbon).
 - **Google Translate:** Готов к работе без API-ключей.
 
 ---

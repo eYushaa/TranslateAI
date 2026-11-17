@@ -108,7 +108,7 @@ class OpenAICompatProvider(ProviderInterface):
 
 class LocalLLMProvider(OpenAICompatProvider):
     id = "local_llm"
-    label = "Yerel LLM"
+    label = "OpenAI Compatible"
     settings_key = "local_llm"
     secret_name = "local_llm_api_key"
 

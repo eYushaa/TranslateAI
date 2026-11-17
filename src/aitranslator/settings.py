@@ -11,10 +11,11 @@ from typing import Any
 from .i18n import normalize_ui_lang, set_ui_language
 from .paths import settings_path
 
-PROVIDER_IDS = ("google", "local_llm", "lmstudio", "gemini")
+PROVIDER_IDS = ("translateai", "google", "local_llm", "lmstudio", "gemini")
 PROVIDER_LABELS = {
+    "translateai": "TranslateAI Engine",
     "google": "Google Translate",
-    "local_llm": "Yerel LLM (OpenAI uyumlu)",
+    "local_llm": "OpenAI Compatible",
     "lmstudio": "LM Studio",
     "gemini": "Google Gemini",
 }
@@ -52,15 +53,23 @@ class GoogleSettings:
 
 
 @dataclass
+class TranslateAISettings:
+    model: str = ""
+    n_ctx: int = 2048
+    n_gpu_layers: int = -1
+
+
+@dataclass
 class ProviderSettings:
     active: str = "google"
     auto_fallback: bool = False
-    fallback_order: list[str] = field(default_factory=lambda: ["lmstudio", "local_llm", "gemini", "google"])
+    fallback_order: list[str] = field(default_factory=lambda: ["translateai", "lmstudio", "local_llm", "gemini", "google"])
     timeout_seconds: int = 30
+    translateai: TranslateAISettings = field(default_factory=TranslateAISettings)
     local_llm: EndpointSettings = field(default_factory=lambda: EndpointSettings("http://localhost:11434/v1", ""))
     lmstudio: EndpointSettings = field(default_factory=lambda: EndpointSettings("http://localhost:1234/v1", ""))
     gemini: EndpointSettings = field(
-        default_factory=lambda: EndpointSettings("https://generativelanguage.googleapis.com/v1beta", "gemini-2.5-flash")
+        default_factory=lambda: EndpointSettings("https://generativelanguage.googleapis.com/v1beta", "gemini-3.8-flash")
     )
     google: GoogleSettings = field(default_factory=GoogleSettings)
 

@@ -1,19 +1,19 @@
 <div align="center">
 
-# 🌐 AITranslator
+# 🌐 TranslateAI
 
 ### **No Barrier, No Border**
 
 *Windows 10 & 11을 위한 시스템 전역 AI 번역, 화면 OCR 및 문장 다듬기 비서.*
 
 [![Platform](https://img.shields.io/badge/Platform-Windows%2010%20%2F%2011-0078D6?logo=windows&logoColor=white)](https://microsoft.com/windows)
-[![Release](https://img.shields.io/badge/Release-v1.0.0-success?logo=github)](https://github.com/eYushaa/AI-Translator/releases)
+[![Release](https://img.shields.io/badge/Release-v1.0.1-success?logo=github)](https://github.com/eYushaa/AI-Translator/releases)
 [![PySide6](https://img.shields.io/badge/GUI-PySide6%20%2F%20Qt-41CD52?logo=qt&logoColor=white)](https://www.qt.io/)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](../LICENSE)
 
 ---
 
-**[English](../README.md) • [Türkçe](README.tr.md) • [Español](README.es.md) • [Français](README.fr.md) • [Deutsch](README.de.md) • [Русский](README.ru.md) • [العربية](README.ar.md) • [简体中文](README.zh.md) • [日本語](README.ja.md) • [한국어](README.ko.md)**
+**[English](../README.md) • [Türkçe](README.tr.md) • [Español](README.es.md) • [Français](README.fr.md) • [Deutsch](README.de.md) • [Русский](README.ru.md) • [العربية](README.ar.md) • [עברית](README.he.md) • [简体中文](README.zh.md) • [日本語](README.ja.md) • [한국어](README.ko.md)**
 
 ---
 
@@ -21,11 +21,21 @@
 
 ## 🌟 개요
 
-**AITranslator**는 윈도우 환경 어디서나 고품질 AI 번역, 화면 캡처 텍스트 인식(OCR), 그리고 세련된 문장 다듬기를 전역 단축키로 손쉽게 호출할 수 있는 생산성 데스크톱 유틸리티입니다.
+**TranslateAI**는 윈도우 환경 어디서나 고품질 AI 번역, 내장 `.gguf` 오프라인 엔진, 화면 캡처 텍스트 인식(OCR), 그리고 세련된 문장 다듬기를 전역 단축키로 손쉽게 호출할 수 있는 생산성 데스크톱 유틸리티입니다.
 
 Outlook에서 이메일을 작성하거나, Slack/Discord에서 대화할 때, VS Code에서 코딩하거나 웹 서핑 중일 때도 작업 흐름을 끊지 않고 자연스럽게 번역할 수 있습니다.
 
 > **"No Barrier, No Border"** — 언어의 장벽과 국경을 넘어 데스크톱 위에서 완벽한 개인정보 보호와 함께 자유롭게 소통하세요.
+
+---
+
+## 🆕 v1.0.1 새로운 기능
+
+- **🧠 내장 TranslateAI Engine (`.gguf` 실행기):** 앱 실행 폴더 옆에 `models/` 폴더를 자동 생성하며, 미리 설치된 `.gguf` 모델을 별도 서버 없이 100% 오프라인으로 직접 실행합니다.
+- **🔌 OpenAI Compatible 제공자:** 로컬 호환 제공자 이름을 **OpenAI Compatible**로 통일하고, 스크롤 화살표나 크기 흔들림이 없는 깔끔한 필(Pill) 탭 UI를 적용했습니다.
+- **🇮🇱 히브리어 UI 및 RTL 완벽 지원 (`עברית`):** 아랍어에 이어 오른쪽에서 왼쪽(RTL) 레이아웃이 적용된 히브리어 UI가 추가되었습니다 (총 11개 UI 언어).
+- **🎨 UI 및 사용성 개선:** 선명한 벡터 체크박스 아이콘, 괄호 설명이 제거된 깔끔한 언어 이름, 각 단축키 제목 아래 회색 안내 문구를 추가했습니다.
+- **🏷️ 공식 이름 TranslateAI 변경:** 앱 브랜드, 실행 파일(`TranslateAI.exe`), 설정 경로를 **TranslateAI**로 통일했습니다.
 
 ---
 
@@ -34,9 +44,9 @@ Outlook에서 이메일을 작성하거나, Slack/Discord에서 대화할 때, V
 파이썬 설치나 복잡한 명령어 설정이 필요 없습니다:
 
 1. GitHub의 **[Releases (릴리스)](https://github.com/eYushaa/AI-Translator/releases)** 페이지로 이동합니다.
-2. 설치 파일 **`AITranslator-Setup.exe`** 또는 포터블 실행 파일 **`AITranslator.exe`**를 다운로드합니다.
-3. 설치 후 앱을 실행합니다.
-4. 앱이 **윈도우 시스템 트레이**(시계 옆)에서 조용히 실행되며 즉시 단축키를 사용할 수 있습니다.
+2. **`TranslateAI-Setup.exe`**를 다운로드하여 설치 프로그램을 실행합니다.
+3. 설치 과정에서 원하는 AI 모델을 선택하고 다운로드를 완료합니다.
+4. 이제 **윈도우 시스템 트레이**에서 바로 **TranslateAI**를 사용할 수 있습니다!
 
 ---
 
@@ -58,10 +68,11 @@ Outlook에서 이메일을 작성하거나, Slack/Discord에서 대화할 때, V
 
 ---
 
-### 🤖 3. 로컬 및 클라우드 AI 모델 지원
-- **로컬 LLM (Ollama / LocalAI / vLLM):** OpenAI 호환 API(`http://localhost:11434/v1`)를 통해 100% 오프라인 비공개 추론.
+### 🤖 3. 로컬 및 클라우드 AI 모델 + 내장 GGUF 엔진 지원
+- **TranslateAI Engine (내장 `.gguf`):** `models/` 폴더에 있는 `.gguf` 모델을 외부 서버 없이 100% 오프라인으로 직접 실행.
+- **OpenAI Compatible (Ollama / LocalAI / vLLM):** OpenAI 호환 API(`http://localhost:11434/v1`)를 통해 100% 오프라인 비공개 추론.
 - **LM Studio:** 로컬 모델 환경과 간편 연결(`http://localhost:1234/v1`).
-- **Google Gemini:** Gemini 2.5 Flash, Pro를 통한 초고속 클라우드 번역.
+- **Google Gemini:** Gemini 3.8 Flash, Gemini 3.5 Flash-Lite 및 Gemini 4(Argon / Hydrogen / Carbon)를 통한 초고속 클라우드 번역.
 - **Google Translate:** API 키 없이 즉시 사용 가능한 기본 엔진 제공.
 
 ---

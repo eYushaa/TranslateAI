@@ -13,6 +13,7 @@ from .controller import TranslationController
 from .history import HistoryStore
 from .i18n import t
 from .logging_service import get_logger, setup_logging
+from .paths import models_dir
 from .replacement import TextReplacementService
 from .secure_storage import SecureStorage
 from .selection import TextSelectionService
@@ -28,7 +29,7 @@ from .winplat.clipboard import ClipboardManager
 from .winplat.hotkeys import HotkeyManager
 from .winplat.windows_io import WindowsInspector, WindowsKeyboard
 
-IPC_NAME = "AITranslator.SingleInstance.v1"
+IPC_NAME = "TranslateAI.SingleInstance.v1"
 log = get_logger("app")
 
 
@@ -63,6 +64,7 @@ def run(argv: list[str]) -> int:
     background = "--background" in argv
 
     # ---- servisler ----
+    models_dir()
     settings = SettingsManager()
     first_run = not settings.path.exists()
     secrets = SecureStorage()

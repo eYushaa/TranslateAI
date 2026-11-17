@@ -35,3 +35,8 @@ history.jsonl
 *.swp
 *.swo
 *~
+
+# Local GGUF models (provided externally / by installer)
+models/*.gguf
+models/**/*.gguf
+!models/.gitkeep

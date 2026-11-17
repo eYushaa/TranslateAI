@@ -15,6 +15,7 @@ from .providers import (
     LocalLLMProvider,
     ProviderError,
     ProviderInterface,
+    TranslateAIEngineProvider,
 )
 from .secure_storage import SecureStorage
 from .settings import SettingsManager
@@ -51,6 +52,7 @@ class TranslationService:
         self.providers: dict[str, ProviderInterface] = providers or {
             p.id: p
             for p in (
+                TranslateAIEngineProvider(get, secrets),
                 GoogleTranslateProvider(get, secrets),
                 LocalLLMProvider(get, secrets),
                 LMStudioProvider(get, secrets),
@@ -74,7 +76,7 @@ class TranslationService:
                         prov = self.providers.get(pid)
                         if prov is not None and prov not in chain and prov.is_configured():
                             chain.append(prov)
-            for pid in ("gemini", "lmstudio", "local_llm"):
+            for pid in ("translateai", "gemini", "lmstudio", "local_llm"):
                 prov = self.providers.get(pid)
                 if prov is not None and prov not in chain and prov.is_configured():
                     chain.append(prov)
