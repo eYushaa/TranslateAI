@@ -23,7 +23,7 @@
     "target_language": ""
   },
   "providers": {
-    "active": "google",
+    "active": "translateai",
     "auto_fallback": false,
     "fallback_order": ["translateai", "lmstudio", "local_llm", "gemini", "google"],
     "timeout_seconds": 30,

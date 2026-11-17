@@ -61,7 +61,7 @@ class TranslateAISettings:
 
 @dataclass
 class ProviderSettings:
-    active: str = "google"
+    active: str = "translateai"
     auto_fallback: bool = False
     fallback_order: list[str] = field(default_factory=lambda: ["translateai", "lmstudio", "local_llm", "gemini", "google"])
     timeout_seconds: int = 30
