@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from typing import Callable
 
-from PySide6.QtCore import QPoint, Qt, Signal
+from PySide6.QtCore import QPoint, QSize, Qt, Signal
 from PySide6.QtGui import QColor, QCursor, QGuiApplication, QKeyEvent
 from PySide6.QtWidgets import (
     QApplication, QFrame, QGraphicsDropShadowEffect, QHBoxLayout, QLabel,
@@ -59,9 +59,9 @@ class LanguageItemWidget(QWidget):
         c = _DARK if is_dark() else _LIGHT
 
         layout = QHBoxLayout(self)
-        layout.setContentsMargins(10, 7, 10, 7)
+        layout.setContentsMargins(10, 6, 10, 6)
         layout.setSpacing(10)
-        self.setMinimumHeight(52)
+        self.setFixedHeight(52)
 
         # Dil Kodu Rozeti (örn. [TR], [EN], [DE])
         self.badge = QLabel(code.upper())
@@ -100,10 +100,16 @@ class LanguageItemWidget(QWidget):
             primary_name = native_name
             sub_text = en_name if native_name != en_name else ""
 
+        text_align = (
+            Qt.AlignmentFlag.AlignRight if is_rtl() else Qt.AlignmentFlag.AlignLeft
+        ) | Qt.AlignmentFlag.AlignVCenter
+
         self.lbl_name = QLabel(primary_name)
+        self.lbl_name.setAlignment(text_align)
         self.lbl_name.setStyleSheet(f"font-weight: {'700' if is_active else '500'}; font-size: 10pt; color: {c['text']};")
 
         self.lbl_sub = QLabel(sub_text)
+        self.lbl_sub.setAlignment(text_align)
         self.lbl_sub.setStyleSheet(f"color: {c['muted']}; font-size: 8.5pt;")
 
         name_col.addWidget(self.lbl_name)
@@ -296,7 +302,7 @@ class LanguagePickerWindow(QWidget):
             }}
             QListWidget::item {{
                 border-radius: 8px;
-                padding: 1px 0px;
+                padding: 0px;
                 border: 1px solid transparent;
             }}
             QListWidget::item:hover {{
@@ -375,14 +381,14 @@ class LanguagePickerWindow(QWidget):
 
         selected_row = 0
         for i, (code, tr, native, is_recent) in enumerate(items_to_show):
-            item = QListWidgetItem(self.list_widget)
+            item = QListWidgetItem()
             item.setData(Qt.ItemDataRole.UserRole, code)
             is_active = (code == target)
             if is_active and not query.strip():
                 selected_row = i
 
             widget = LanguageItemWidget(code, tr, native, is_active=is_active, is_recent=is_recent)
-            item.setSizeHint(widget.sizeHint())
+            item.setSizeHint(QSize(0, widget.height() + 2))
             self.list_widget.addItem(item)
             self.list_widget.setItemWidget(item, widget)
 
