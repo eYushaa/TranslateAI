@@ -25,6 +25,7 @@ from ..providers import (
     DEFAULT_SYSTEM_PROMPT, GeminiProvider, GoogleTranslateProvider, LMStudioProvider, LocalLLMProvider,
     PROMPT_PRESETS, ProviderError, TranslateAIEngineProvider,
 )
+from ..providers.translateai_engine import parse_ctx_limit
 from ..secure_storage import MemoryBackend, SecureStorage
 from ..settings import OcrSettings, PROVIDER_IDS, PROVIDER_LABELS, Settings
 from ..winplat.hotkey_parse import find_duplicates
@@ -46,6 +47,14 @@ GEMINI_SUGGESTIONS = [
     "gemini-4-argon",
     "gemini-4-hydrogen",
     "gemini-4-carbon",
+]
+TAI_CTX_PRESETS = [
+    ("4096 (4K)", 4096),
+    ("8192 (8K)", 8192),
+    ("10000 (10K)", 10000),
+    ("16384 (16K)", 16384),
+    ("32768 (32K)", 32768),
+    ("50000 (50K)", 50000),
 ]
 
 
@@ -241,6 +250,37 @@ class SettingsWindow(QMainWindow):
         card.root.addWidget(self.lbl_note_alt_m)
         lay.addWidget(card)
 
+        context_card = Card()
+        cheader = QHBoxLayout()
+        self.lbl_ctx_title = QLabel(t("ctx_header"))
+        self.lbl_ctx_title.setStyleSheet("font-weight: 600; font-size: 11pt;")
+        cheader.addWidget(self.lbl_ctx_title)
+        cheader.addStretch(1)
+        context_card.root.addLayout(cheader)
+
+        self.chk_context_enabled = QCheckBox(t("chk_context_enabled"))
+        self.chk_context_enabled.toggled.connect(self._on_context_toggled)
+        context_card.root.addWidget(self.chk_context_enabled)
+
+        ctx_row = QHBoxLayout()
+        ctx_row.setSpacing(12)
+        self.lbl_context_count = QLabel(t("lbl_context_count"))
+        self.lbl_context_count.setStyleSheet("font-weight: 500;")
+        self.cmb_context_count = QComboBox()
+        self._populate_context_counts()
+        self.btn_clear_context = QPushButton(t("btn_clear_context"))
+        self.btn_clear_context.clicked.connect(self._clear_context_memory)
+        ctx_row.addWidget(self.lbl_context_count)
+        ctx_row.addWidget(self.cmb_context_count)
+        ctx_row.addStretch(1)
+        ctx_row.addWidget(self.btn_clear_context)
+        context_card.root.addLayout(ctx_row)
+
+        self.lbl_context_help = muted_label(t("ctx_help"))
+        self.lbl_context_help.setWordWrap(True)
+        context_card.root.addWidget(self.lbl_context_help)
+        lay.addWidget(context_card)
+
         prompt_card = Card()
         pheader = QHBoxLayout()
         self.lbl_prompt_title = QLabel(t("prompt_header"))
@@ -276,6 +316,32 @@ class SettingsWindow(QMainWindow):
 
         lay.addStretch(1)
         return _scroll(page)
+
+    def _populate_context_counts(self) -> None:
+        cur_val = self.cmb_context_count.currentData()
+        self.cmb_context_count.blockSignals(True)
+        self.cmb_context_count.clear()
+        for n in (2, 3, 5, 8, 10):
+            self.cmb_context_count.addItem(t("ctx_count_fmt", n=n), n)
+        if cur_val is not None:
+            idx = self.cmb_context_count.findData(cur_val)
+            self.cmb_context_count.setCurrentIndex(idx if idx >= 0 else 2)
+        else:
+            self.cmb_context_count.setCurrentIndex(2)
+        self.cmb_context_count.blockSignals(False)
+
+    def _on_context_toggled(self, checked: bool) -> None:
+        self.lbl_context_count.setEnabled(checked)
+        self.cmb_context_count.setEnabled(checked)
+
+    def _clear_context_memory(self) -> None:
+        self.ctx.translation.clear_context()
+        self.ctx.translation.clear_cache()
+        self.status.setObjectName("Ok")
+        self.status.setStyleSheet("")
+        self.status.setText(t("ctx_cleared_msg"))
+        self.status.style().unpolish(self.status)
+        self.status.style().polish(self.status)
 
     def _populate_prompt_presets(self) -> None:
         cur_idx = self.cmb_prompt_presets.currentIndex()
@@ -493,14 +559,31 @@ class SettingsWindow(QMainWindow):
         lbl_model = QLabel(t("lbl_model"))
         form.addRow(lbl_model, model)
 
+        max_ctx = QComboBox()
+        max_ctx.setEditable(True)
+        max_ctx.setInsertPolicy(QComboBox.InsertPolicy.NoInsert)
+        for label, val in TAI_CTX_PRESETS:
+            max_ctx.addItem(label, val)
+        lbl_max_ctx = QLabel(t("lbl_tai_max_ctx"))
+        form.addRow(lbl_max_ctx, max_ctx)
+
+        chk_auto_ctx = QCheckBox(t("chk_tai_auto_ctx"))
+        chk_dynamic_trim = QCheckBox(t("chk_tai_dynamic_trim"))
+
         self.pw[pid].update(
             dir_edit=dir_edit,
             btn_open_dir=btn_open_dir,
             lbl_dir=lbl_dir,
             model=model,
             lbl_model=lbl_model,
+            max_ctx=max_ctx,
+            lbl_max_ctx=lbl_max_ctx,
+            chk_auto_ctx=chk_auto_ctx,
+            chk_dynamic_trim=chk_dynamic_trim,
         )
         card.root.addLayout(form)
+        card.root.addWidget(chk_auto_ctx)
+        card.root.addWidget(chk_dynamic_trim)
         note_lbl = muted_label(t("note_translateai"))
         card.root.addWidget(note_lbl)
         btn_layout, btns = self._buttons(pid, True)
@@ -781,6 +864,12 @@ class SettingsWindow(QMainWindow):
         self.cmb_n.retranslate()
         self.cmb_src.retranslate()
         self.lbl_note_alt_m.setText(t("languages_note_alt_m"))
+        self.lbl_ctx_title.setText(t("ctx_header"))
+        self.chk_context_enabled.setText(t("chk_context_enabled"))
+        self.lbl_context_count.setText(t("lbl_context_count"))
+        self._populate_context_counts()
+        self.btn_clear_context.setText(t("btn_clear_context"))
+        self.lbl_context_help.setText(t("ctx_help"))
         self.lbl_prompt_title.setText(t("prompt_header"))
         self.lbl_presets.setText(t("lbl_presets"))
         self.btn_reset_prompt.setText(t("btn_reset_prompt"))
@@ -853,6 +942,9 @@ class SettingsWindow(QMainWindow):
                 self.pw[pid]["lbl_dir"].setText(t("lbl_models_dir"))
                 self.pw[pid]["btn_open_dir"].setText(t("btn_open_models_dir"))
                 self.pw[pid]["lbl_model"].setText(t("lbl_model"))
+                self.pw[pid]["lbl_max_ctx"].setText(t("lbl_tai_max_ctx"))
+                self.pw[pid]["chk_auto_ctx"].setText(t("chk_tai_auto_ctx"))
+                self.pw[pid]["chk_dynamic_trim"].setText(t("chk_tai_dynamic_trim"))
                 btns[0].setText(t("btn_list_models"))
                 btns[1].setText(t("btn_test_conn"))
                 combo: QComboBox = self.pw[pid]["model"]
@@ -947,6 +1039,15 @@ class SettingsWindow(QMainWindow):
         self.cmb_b.set_code(s.languages.alt_b_target)
         self.cmb_n.set_code(s.languages.alt_n_target)
         self.cmb_src.set_code(s.languages.source)
+        ctx_on = bool(getattr(s.languages, "context_enabled", True))
+        self.chk_context_enabled.setChecked(ctx_on)
+        self._on_context_toggled(ctx_on)
+        ctx_n = int(getattr(s.languages, "context_max_messages", 5) or 5)
+        ctx_idx = self.cmb_context_count.findData(ctx_n)
+        if ctx_idx < 0:
+            self.cmb_context_count.addItem(t("ctx_count_fmt", n=ctx_n), ctx_n)
+            ctx_idx = self.cmb_context_count.findData(ctx_n)
+        self.cmb_context_count.setCurrentIndex(max(0, ctx_idx))
         prompt_val = s.languages.prompt if s.languages.prompt.strip() else DEFAULT_SYSTEM_PROMPT
         self.txt_prompt.setPlainText(prompt_val)
         matched_preset = 0
@@ -974,6 +1075,19 @@ class SettingsWindow(QMainWindow):
         self.cmb_active.setCurrentIndex(max(0, self.cmb_active.findData(s.providers.active)))
         self.chk_fallback.setChecked(s.providers.auto_fallback)
         self._populate_translateai_models(selected=s.providers.translateai.model)
+        max_ctx_val = parse_ctx_limit(getattr(s.providers.translateai, "max_n_ctx", 10000), 10000)
+        cmb_max_ctx: QComboBox = self.pw["translateai"]["max_ctx"]
+        max_ctx_idx = cmb_max_ctx.findData(max_ctx_val)
+        if max_ctx_idx >= 0:
+            cmb_max_ctx.setCurrentIndex(max_ctx_idx)
+        else:
+            cmb_max_ctx.setEditText(str(max_ctx_val))
+        self.pw["translateai"]["chk_auto_ctx"].setChecked(
+            bool(getattr(s.providers.translateai, "auto_expand_ctx", True))
+        )
+        self.pw["translateai"]["chk_dynamic_trim"].setChecked(
+            bool(getattr(s.providers.translateai, "dynamic_context_trim", True))
+        )
         for pid in ("local_llm", "lmstudio", "gemini"):
             ep = getattr(s.providers, pid)
             self.pw[pid]["url"].setText(ep.base_url)
@@ -1007,6 +1121,9 @@ class SettingsWindow(QMainWindow):
         s.languages.alt_b_target = self.cmb_b.code()
         s.languages.alt_n_target = self.cmb_n.code()
         s.languages.source = self.cmb_src.code() or "auto"
+        s.languages.context_enabled = self.chk_context_enabled.isChecked()
+        ctx_data = self.cmb_context_count.currentData()
+        s.languages.context_max_messages = int(ctx_data) if isinstance(ctx_data, int) else 5
         s.languages.prompt = self.txt_prompt.toPlainText().strip()
         if not hasattr(s, "ocr"):
             s.ocr = OcrSettings()
@@ -1020,6 +1137,12 @@ class SettingsWindow(QMainWindow):
         s.providers.auto_fallback = self.chk_fallback.isChecked()
         tai_data = self.pw["translateai"]["model"].currentData()
         s.providers.translateai.model = tai_data if isinstance(tai_data, str) else ""
+        s.providers.translateai.max_n_ctx = parse_ctx_limit(
+            self.pw["translateai"]["max_ctx"].currentText(),
+            default=10000,
+        )
+        s.providers.translateai.auto_expand_ctx = self.pw["translateai"]["chk_auto_ctx"].isChecked()
+        s.providers.translateai.dynamic_context_trim = self.pw["translateai"]["chk_dynamic_trim"].isChecked()
         for pid in ("local_llm", "lmstudio", "gemini"):
             ep = getattr(s.providers, pid)
             ep.base_url = self.pw[pid]["url"].text().strip()
@@ -1263,6 +1386,7 @@ class SettingsWindow(QMainWindow):
     def _clear_history(self) -> None:
         if QMessageBox.question(self, t("confirm_clear_title"), t("confirm_clear_msg")) == QMessageBox.StandardButton.Yes:
             self.ctx.history.clear()
+            self.ctx.translation.clear_context()
             self._refresh_history()
 
     def _on_page_changed(self, row: int) -> None:

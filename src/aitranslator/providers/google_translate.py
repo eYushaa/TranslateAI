@@ -80,7 +80,14 @@ class GoogleTranslateProvider(ProviderInterface):
             raise ProviderError("bad_response", "Google Translate: beklenmeyen yanıt biçimi.") from exc
 
     # ---- arayüz ---------------------------------------------------------------
-    def translate(self, text: str, target: str, source: str = "auto", prompt: str = "") -> str:
+    def translate(
+        self,
+        text: str,
+        target: str,
+        source: str = "auto",
+        prompt: str = "",
+        context: list[tuple[str, str, str]] | None = None,
+    ) -> str:
         if not self.is_configured():
             raise ProviderError("config", "Google Translate (resmî API): API anahtarı girilmemiş.")
         call = self._cloud_call if self.use_cloud else self._free_call

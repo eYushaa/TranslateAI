@@ -64,7 +64,14 @@ class ProviderInterface(ABC):
         """Sağlayıcı kullanılabilir şekilde yapılandırılmış mı?"""
 
     @abstractmethod
-    def translate(self, text: str, target: str, source: str = "auto", prompt: str = "") -> str:
+    def translate(
+        self,
+        text: str,
+        target: str,
+        source: str = "auto",
+        prompt: str = "",
+        context: list[tuple[str, str, str]] | None = None,
+    ) -> str:
         """Metni çevirir; hata durumunda ProviderError fırlatır."""
 
     @abstractmethod

@@ -13,7 +13,10 @@
     "alt_b_target": "",
     "alt_n_target": "",
     "source": "auto",
-    "prompt": ""
+    "prompt": "",
+    "context_enabled": true,
+    "context_max_messages": 5,
+    "context_ttl_minutes": 30
   },
   "ocr": {
     "engine": "auto",
@@ -29,7 +32,10 @@
     "timeout_seconds": 30,
     "translateai": {
       "model": "",
-      "n_ctx": 2048,
+      "n_ctx": 4096,
+      "max_n_ctx": 10000,
+      "auto_expand_ctx": true,
+      "dynamic_context_trim": true,
       "n_gpu_layers": -1
     },
     "local_llm": {

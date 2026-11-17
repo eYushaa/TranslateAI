@@ -80,7 +80,48 @@ PROMPT_PRESETS: list[tuple[str, str]] = [
 ]
 
 
-def system_prompt(target: str, source: str = "auto", custom_template: str = "") -> str:
+def _compact_snippet(text: str, limit: int = 300) -> str:
+    cleaned = " ".join((text or "").split()).replace('"', "'")
+    if len(cleaned) > limit:
+        return cleaned[:limit] + "…"
+    return cleaned
+
+
+def format_context_block(
+    context: list[tuple[str, str, str]] | None,
+    snippet_limit: int = 300,
+) -> str:
+    """Format recent (source_text, translated_text, target_lang) tuples as a compact reference block."""
+    if not context:
+        return ""
+    limit = max(50, int(snippet_limit))
+    lines = [
+        "\n\nRecent translation context (for reference only — use this to keep pronouns, names, "
+        "terminology, and conversational tone consistent, but DO NOT repeat or include these in "
+        "your output; translate ONLY the current user text):"
+    ]
+    idx = 0
+    for item in context:
+        if not item or len(item) < 2:
+            continue
+        src_text = _compact_snippet(item[0], limit=limit)
+        dst_text = _compact_snippet(item[1], limit=limit)
+        tgt_raw = item[2] if len(item) > 2 else ""
+        if not src_text or not dst_text:
+            continue
+        idx += 1
+        tgt_name = LanguageService.english_name(tgt_raw) if tgt_raw else "target"
+        lines.append(f'{idx}. Source: "{src_text}" -> Translation ({tgt_name}): "{dst_text}"')
+    return "\n".join(lines) if idx > 0 else ""
+
+
+def system_prompt(
+    target: str,
+    source: str = "auto",
+    custom_template: str = "",
+    context: list[tuple[str, str, str]] | None = None,
+    snippet_limit: int = 300,
+) -> str:
     tgt = LanguageService.english_name(target)
     src_norm = LanguageService.normalize(source)
     tgt_norm = LanguageService.normalize(target)
@@ -96,6 +137,9 @@ def system_prompt(target: str, source: str = "auto", custom_template: str = "") 
     for ph in ("{source}", "{src}", "{src_part}", "{source_lang}"):
         result = result.replace(ph, src_part)
     result = result.replace("{target_code}", tgt_norm).replace("{source_code}", src_norm)
+    ctx_block = format_context_block(context, snippet_limit=snippet_limit)
+    if ctx_block:
+        result += ctx_block
     return result
 
 

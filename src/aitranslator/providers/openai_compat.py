@@ -61,14 +61,21 @@ class OpenAICompatProvider(ProviderInterface):
         raise ProviderError("bad_response", f"{self.label}: sunucu hata döndürdü (HTTP {code}).")
 
     # --- işlemler ---------------------------------------------------------------
-    def translate(self, text: str, target: str, source: str = "auto", prompt: str = "") -> str:
+    def translate(
+        self,
+        text: str,
+        target: str,
+        source: str = "auto",
+        prompt: str = "",
+        context: list[tuple[str, str, str]] | None = None,
+    ) -> str:
         if not self.is_configured():
             raise ProviderError("config", f"{self.label}: API adresi ve model adı ayarlanmamış.")
         prompt_tmpl = prompt.strip() if prompt and prompt.strip() else getattr(self.settings.languages, "prompt", "")
         payload = {
             "model": self.model,
             "messages": [
-                {"role": "system", "content": system_prompt(target, source, prompt_tmpl)},
+                {"role": "system", "content": system_prompt(target, source, prompt_tmpl, context=context)},
                 {"role": "user", "content": text},
             ],
             "temperature": 0,

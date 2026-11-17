@@ -39,6 +39,9 @@ class LanguageSettings:
     source: str = "auto"
     prompt: str = ""  # boş = varsayılan prompt (DEFAULT_SYSTEM_PROMPT)
     recent_targets: list[str] = field(default_factory=lambda: ["en", "tr", "de", "es", "fr", "ru"])
+    context_enabled: bool = True
+    context_max_messages: int = 5
+    context_ttl_minutes: int = 30
 
 
 @dataclass
@@ -55,7 +58,10 @@ class GoogleSettings:
 @dataclass
 class TranslateAISettings:
     model: str = ""
-    n_ctx: int = 2048
+    n_ctx: int = 4096
+    max_n_ctx: int = 10000
+    auto_expand_ctx: bool = True
+    dynamic_context_trim: bool = True
     n_gpu_layers: int = -1
 
 
@@ -156,9 +162,11 @@ class SettingsManager:
     def load(self) -> Settings:
         with self._lock:
             settings = Settings()
+            data: dict[str, Any] | None = None
             try:
-                data = json.loads(self.path.read_text(encoding="utf-8"))
-                if isinstance(data, dict):
+                raw = json.loads(self.path.read_text(encoding="utf-8"))
+                if isinstance(raw, dict):
+                    data = raw
                     _merge(settings, data)
             except FileNotFoundError:
                 pass
@@ -168,6 +176,16 @@ class SettingsManager:
                     self.path.replace(self.path.with_suffix(".corrupt.json"))
                 except OSError:
                     pass
+            if data is not None:
+                prov_raw = data.get("providers")
+                tai_raw = prov_raw.get("translateai") if isinstance(prov_raw, dict) else None
+                if isinstance(tai_raw, dict) and tai_raw.get("n_ctx") == 2048 and "max_n_ctx" not in tai_raw:
+                    settings.providers.translateai.n_ctx = 4096
+            settings.providers.translateai.n_ctx = max(512, settings.providers.translateai.n_ctx)
+            settings.providers.translateai.max_n_ctx = max(
+                settings.providers.translateai.n_ctx,
+                settings.providers.translateai.max_n_ctx,
+            )
             if settings.providers.active not in PROVIDER_IDS:
                 settings.providers.active = "google"
             settings.general.ui_language = normalize_ui_lang(settings.general.ui_language)

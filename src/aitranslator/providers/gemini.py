@@ -43,12 +43,19 @@ class GeminiProvider(ProviderInterface):
             raise ProviderError("bad_response", "Gemini: istek reddedildi (HTTP 400). Model adını ve metni kontrol edin.")
         raise ProviderError("bad_response", f"Gemini: sunucu hata döndürdü (HTTP {code}).")
 
-    def translate(self, text: str, target: str, source: str = "auto", prompt: str = "") -> str:
+    def translate(
+        self,
+        text: str,
+        target: str,
+        source: str = "auto",
+        prompt: str = "",
+        context: list[tuple[str, str, str]] | None = None,
+    ) -> str:
         if not self.is_configured():
             raise ProviderError("config", "Gemini: API anahtarı veya model ayarlanmamış.")
         prompt_tmpl = prompt.strip() if prompt and prompt.strip() else getattr(self.settings.languages, "prompt", "")
         payload = {
-            "systemInstruction": {"parts": [{"text": system_prompt(target, source, prompt_tmpl)}]},
+            "systemInstruction": {"parts": [{"text": system_prompt(target, source, prompt_tmpl, context=context)}]},
             "contents": [{"role": "user", "parts": [{"text": text}]}],
             "generationConfig": {"temperature": 0},
         }
